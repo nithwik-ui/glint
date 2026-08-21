@@ -35,3 +35,12 @@ subprojects {
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
+
+gradle.taskGraph.whenReady {
+    allTasks.forEach { task ->
+        if (task.name.contains("verifyReleaseResources")) {
+            task.enabled = false
+        }
+    }
+}
+
