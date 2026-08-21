@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Glint - Interest Selection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed": "#29074a",
+                      "primary-fixed": "#f0dbff",
+                      "secondary-container": "#d9b5ff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "inverse-primary": "#ddb7ff",
+                      "surface-dim": "#e1d7e4",
+                      "tertiary": "#7b5500",
+                      "on-primary-fixed": "#2c0051",
+                      "on-tertiary-container": "#fffbff",
+                      "on-secondary-container": "#614283",
+                      "inverse-surface": "#342e38",
+                      "on-background": "#1f1a23",
+                      "outline": "#7e7385",
+                      "tertiary-fixed-dim": "#fabc4e",
+                      "surface-container-high": "#f0e5f2",
+                      "secondary": "#6f5092",
+                      "secondary-fixed": "#efdbff",
+                      "surface-container-low": "#fbf0fe",
+                      "outline-variant": "#cfc2d6",
+                      "on-tertiary-fixed": "#281900",
+                      "on-surface-variant": "#4d4354",
+                      "error-container": "#ffdad6",
+                      "primary-fixed-dim": "#ddb7ff",
+                      "error": "#ba1a1a",
+                      "background": "#fff7fe",
+                      "secondary-fixed-dim": "#dbb8ff",
+                      "on-tertiary-fixed-variant": "#604100",
+                      "surface-container": "#f5eaf8",
+                      "on-surface": "#1f1a23",
+                      "on-primary-fixed-variant": "#6900b3",
+                      "surface-variant": "#eadfed",
+                      "surface-tint": "#842bd2",
+                      "surface-bright": "#fff7fe",
+                      "on-secondary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "surface-container-highest": "#eadfed",
+                      "primary": "#8127cf",
+                      "on-error": "#ffffff",
+                      "tertiary-container": "#9b6b00",
+                      "on-primary-container": "#fffbff",
+                      "on-error-container": "#93000a",
+                      "surface": "#fff7fe",
+                      "on-secondary-fixed-variant": "#573878",
+                      "primary-container": "#9c48ea",
+                      "inverse-on-surface": "#f8edfb",
+                      "tertiary-fixed": "#ffdead"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1200px",
+                      "stack-sm": "8px",
+                      "stack-lg": "48px",
+                      "margin-mobile": "20px",
+                      "gutter": "16px",
+                      "unit": "4px",
+                      "stack-md": "24px",
+                      "margin-desktop": "48px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "caption-xs": [
+                              "Inter"
+                      ],
+                      "headline-md-mobile": [
+                              "Inter"
+                      ],
+                      "body-base": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Inter"
+                      ],
+                      "title-sm": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "caption-xs": [
+                              "13px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-base": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "title-sm": [
+                              "22px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "36px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        
+        .category-card {
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 32px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .category-card.selected {
+            transform: scale(0.98);
+        }
+
+        .category-card.selected::after {
+            border-color: theme('colors.primary');
+            box-shadow: inset 0 0 20px rgba(129, 39, 207, 0.15), 0 0 30px rgba(129, 39, 207, 0.2);
+        }
+
+        .category-card .check-icon {
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .category-card.selected .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .category-card img {
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .category-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .continue-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .continue-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .luminous-shadow {
+            box-shadow: 0 40px 80px -20px rgba(129, 39, 207, 0.08);
+        }
+        
+        /* Floating Action Bar Container */
+        .fab-container {
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased min-h-screen flex flex-col relative pb-32">
+<!-- Header Section -->
+<header class="pt-16 pb-8 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full flex-shrink-0">
+<div class="flex items-center gap-2 mb-stack-md text-primary font-caption-xs text-caption-xs uppercase tracking-wider">
+<span class="w-6 h-1 bg-primary rounded-full"></span>
+<span>Step 2 of 3</span>
+</div>
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-background mb-stack-sm tracking-tighter">
+            What Wallpapers Do You Love?
+        </h1>
+<p class="font-body-base text-body-base text-on-surface-variant max-w-lg">
+            Select all categories you enjoy to help us curate your perfect floating canvas.
+        </p>
+</header>
+<!-- Main Content Grid -->
+<main class="flex-grow px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-gutter" id="categoryGrid">
+<!-- Category: Nature -->
+<button class="category-card rounded-[32px] aspect-[4/5] relative flex flex-col justify-end text-left group bg-surface-container-low luminous-shadow cursor-pointer" onclick="toggleSelection(this)">
+<img class="absolute inset-0 w-full h-full object-cover rounded-[32px] z-0" data-alt="A highly detailed, ethereal view of a dense misty forest at dawn. The light is soft and diffused, creating a serene, hyper-minimalist aesthetic. The colors are muted greens and soft whites, embodying a premium, calming wallpaper style with a focus on negative space and depth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrgTkh6Oa6aB7aOrXY39j49T4sV-E2mqtgfM2cYc8gEhGLtRQjZmcbMnLjj8IkTdGjFsIdkGIDFdtyE6Pe2ckfUx2ymvI_k0LgaBemrKRz0RSWkJM0EJXykPaVtiZPeV6zZyf3IXzjm8O7zALudpSeLja_cMu35L8gDXct6GE7wyxTwtW8VU-NAPxcCKy_rr3EwF_SATsL7JjuqfuJ8WJsdfvwyouZfli9WWJkaLq9shF--FsTQgU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent rounded-[32px] z-10"></div>
+<div class="relative z-20 p-6 w-full flex justify-between items-end">
+<span class="font-title-sm text-title-sm text-white drop-shadow-md">Nature</span>
+<div class="check-icon w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_0_15px_rgba(129,39,207,0.5)]">
+<span class="material-symbols-outlined text-white text-[18px]" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</button>
+<!-- Category: Space -->
+<button class="category-card rounded-[32px] aspect-[4/5] relative flex flex-col justify-end text-left group bg-surface-container-low luminous-shadow cursor-pointer" onclick="toggleSelection(this)">
+<img class="absolute inset-0 w-full h-full object-cover rounded-[32px] z-0" data-alt="A breathtaking, hyper-realistic depiction of a deep space nebula. The colors are rich, luxurious deep purples and subtle golds, creating a sense of vast, ethereal depth. The composition is minimal, focusing on a single, glowing cosmic structure against a pure black background, suitable for a high-end display." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbea6bBk_edM4-EWGFk8leD-b0uDpft8ca66-tWPWw9Qp6Zu4vVM5eph21USxoDXl4zJjiVtGSrTzc46ULgC5CIX9f8qI40c8HP2O2OHPI13zxWWCVBZCNaT3RWFQjzUfU1ORYVQ9oHwhOxDi9o4_HD2JKu8ZHdc66qImZV3cwshoSh16OJnJJ_g2lwDT68dSmKVDOwXRzKOz_oe4g0TmJ8aQW1nOk3-v0bQ78Al4kXtPw8HP8O1Q"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent rounded-[32px] z-10"></div>
+<div class="relative z-20 p-6 w-full flex justify-between items-end">
+<span class="font-title-sm text-title-sm text-white drop-shadow-md">Space</span>
+<div class="check-icon w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_0_15px_rgba(129,39,207,0.5)]">
+<span class="material-symbols-outlined text-white text-[18px]" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</button>
+<!-- Category: AMOLED -->
+<button class="category-card rounded-[32px] aspect-[4/5] relative flex flex-col justify-end text-left group bg-surface-container-low luminous-shadow cursor-pointer" onclick="toggleSelection(this)">
+<img class="absolute inset-0 w-full h-full object-cover rounded-[32px] z-0" data-alt="A striking pure black AMOLED wallpaper featuring a single, hyper-detailed, glowing geometric element in the center. The light source is an intense, ethereal neon purple, creating a sharp contrast. The aesthetic is extremely minimalist and luxurious, designed to make OLED screens pop while saving battery." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7b3zf45lH1u_33x7tiQYQr004C39SNts_-MP5MI3M1spRe9T0CV97kcUdTTUoV78lBPRaiLqOYKXoh9ck0FVkxSIwhuV9uIISFnIm9th-ADyGsugmXOqvz2WRL4dufU5Oq_lcli8psReo8hslmRGvd8DSpxBqYdR9xOpmH-ejdeZtyYHcyi7VW1h96ZoZqve_se858xAFHot3Z9v3DRm-Np5TbecjZSIpXLF5sjRzMFvyzzSnetY"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent rounded-[32px] z-10"></div>
+<div class="relative z-20 p-6 w-full flex justify-between items-end">
+<span class="font-title-sm text-title-sm text-white drop-shadow-md">AMOLED</span>
+<div class="check-icon w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_0_15px_rgba(129,39,207,0.5)]">
+<span class="material-symbols-outlined text-white text-[18px]" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</button>
+<!-- Category: Minimal -->
+<button class="category-card rounded-[32px] aspect-[4/5] relative flex flex-col justify-end text-left group bg-surface-container-low luminous-shadow cursor-pointer" onclick="toggleSelection(this)">
+<img class="absolute inset-0 w-full h-full object-cover rounded-[32px] z-0" data-alt="An ultra-clean, minimalist architectural composition. A soft, off-white wall intersects with a pristine, light-gray staircase under soft, diffuse, high-key lighting. The aesthetic is hyper-minimal luxury, focusing purely on form, shadow, and extensive negative space for a calming, sophisticated look." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvfGQjim7mVADbGL1BopZo-6ljUWlT8wnodqIAJRqrDrV_zYe4Mkl8xmjM7mBAW5za6Y_1OC35SNJrZCFKB3nRtl1-l4XAKCa8MpFhNxrBcNYl5BLCU0uRXKEuw6kTva74z_apw3zyC3M1N9Xef4Mo9HX4LKxqz0IuvVpTRtgLQr7H2AopOnZsydc24eqoFqF-zLCgHwywQqdgXqRRczuAiT39datkCQpUgct7bDp68BEyy-uIHow"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent rounded-[32px] z-10"></div>
+<div class="relative z-20 p-6 w-full flex justify-between items-end">
+<span class="font-title-sm text-title-sm text-white drop-shadow-md">Minimal</span>
+<div class="check-icon w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_0_15px_rgba(129,39,207,0.5)]">
+<span class="material-symbols-outlined text-white text-[18px]" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</button>
+<!-- Category: Abstract -->
+<button class="category-card rounded-[32px] aspect-[4/5] relative flex flex-col justify-end text-left group bg-surface-container-low luminous-shadow cursor-pointer" onclick="toggleSelection(this)">
+<img class="absolute inset-0 w-full h-full object-cover rounded-[32px] z-0" data-alt="A fluid, 3D abstract digital art piece featuring smooth, glass-like waves in soft pastel tones of lavender and white. The forms overlap, creating a sense of deep spatial layering and refraction. The lighting is ethereal, giving the shapes a luminous, premium, and tactile quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPqdZWXn8hwfXLSS7n1VAtjrDzZo93QL07c3XwT4EWpa7plS0Q36zGZeHfid2DsOlWjrZxeNw7QoJxk43WyZZ5Z6fMQXJ-uDkAUnFgKygg7Y7SP7-0oRwYovWnSf59gwZ3kA6f4sip60KdovywLU8DkzUC_7HKxp3IrQjnupTtxBxn9ySGXPVujdIIM5aZc5KeARGz2CAC_QKsINeRF2x1JFTcYhMtcGk_ncFoUsKlnGohP8Crj1k"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent rounded-[32px] z-10"></div>
+<div class="relative z-20 p-6 w-full flex justify-between items-end">
+<span class="font-title-sm text-title-sm text-white drop-shadow-md">Abstract</span>
+<div class="check-icon w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_0_15px_rgba(129,39,207,0.5)]">
+<span class="material-symbols-outlined text-white text-[18px]" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</button>
+<!-- Category: Luxury -->
+<button class="category-card rounded-[32px] aspect-[4/5] relative flex flex-col justify-end text-left group bg-surface-container-low luminous-shadow cursor-pointer" onclick="toggleSelection(this)">
+<img class="absolute inset-0 w-full h-full object-cover rounded-[32px] z-0" data-alt="A close-up macro shot of premium brushed metal and frosted glass, heavily inspired by high-end hardware design. The lighting is sharp, creating precise specular highlights along chamfered edges. The color palette is minimal, mostly silver and white with a subtle, expensive purple reflection in the glass." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTb09HaFTcCkq6W-pGYfYAc5b3cg_UEg9xTq8J21OC1Asemaf0qsQLGrsIkw0a7gd271EryzdY7KoCxxwPv8Vynz8vlnDgYk76tc4j7zB88OY8Bg5NgESAyqq6dn9yRYXEY5-1dRyPzJpnjcJwgUGL8qCCXu3jJidtatRk8vwYK8tHlphJHe0Zok-xqoFzYNh5zSTSsiNJVDYaSiHgKZvQoZGkWvpQaqykI5tEwsXFVhh3qeeICWw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent rounded-[32px] z-10"></div>
+<div class="relative z-20 p-6 w-full flex justify-between items-end">
+<span class="font-title-sm text-title-sm text-white drop-shadow-md">Luxury</span>
+<div class="check-icon w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_0_15px_rgba(129,39,207,0.5)]">
+<span class="material-symbols-outlined text-white text-[18px]" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</button>
+</div>
+</main>
+<!-- Fixed Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 w-full z-[200] p-margin-mobile md:p-margin-desktop pointer-events-none flex justify-center">
+<div class="fab-container bg-surface/80 border border-white/20 rounded-[2rem] p-4 flex flex-col sm:flex-row items-center justify-between w-full max-w-container-max shadow-[0_32px_64px_rgba(129,39,207,0.12)] pointer-events-auto gap-4">
+<div class="px-4 text-center sm:text-left">
+<p class="font-headline-md-mobile text-headline-md-mobile sm:font-headline-md sm:text-headline-md text-on-surface m-0">
+<span class="text-primary font-bold" id="selectedCount">0</span> Selected
+                </p>
+<p class="font-caption-xs text-caption-xs text-on-surface-variant mt-1">Select at least 3 to continue</p>
+</div>
+<button class="continue-btn bg-primary text-on-primary w-full sm:w-auto px-8 py-4 rounded-full font-body-base text-body-base font-semibold shadow-[0_10px_30px_rgba(129,39,207,0.3)] hover:shadow-[0_15px_40px_rgba(129,39,207,0.4)] active:scale-95 flex items-center justify-center gap-2" disabled="" id="continueBtn">
+                Continue
+                <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<script>
+        let selectedCount = 0;
+        const requiredCount = 3;
+        const countDisplay = document.getElementById('selectedCount');
+        const continueBtn = document.getElementById('continueBtn');
+
+        function toggleSelection(element) {
+            const isSelected = element.classList.contains('selected');
+            
+            if (isSelected) {
+                element.classList.remove('selected');
+                selectedCount--;
+            } else {
+                element.classList.add('selected');
+                selectedCount++;
+            }
+            
+            updateUI();
+        }
+
+        function updateUI() {
+            // Update counter
+            countDisplay.textContent = selectedCount;
+            
+            // Pulse animation on counter
+            countDisplay.classList.add('scale-110');
+            setTimeout(() => {
+                countDisplay.classList.remove('scale-110');
+                countDisplay.style.transition = 'transform 0.2s ease';
+            }, 150);
+
+            // Update button state
+            if (selectedCount >= requiredCount) {
+                continueBtn.disabled = false;
+                continueBtn.classList.add('bg-primary-container', 'text-on-primary-container');
+                continueBtn.classList.remove('bg-surface-variant', 'text-on-surface-variant');
+            } else {
+                continueBtn.disabled = true;
+                continueBtn.classList.remove('bg-primary-container', 'text-on-primary-container');
+                continueBtn.classList.add('bg-surface-variant', 'text-on-surface-variant');
+            }
+        }
+    </script>
+</body></html>

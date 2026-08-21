@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Glint - Personalize Your Experience</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#29074a",
+                    "primary-fixed": "#f0dbff",
+                    "secondary-container": "#d9b5ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "inverse-primary": "#ddb7ff",
+                    "surface-dim": "#e1d7e4",
+                    "tertiary": "#7b5500",
+                    "on-primary-fixed": "#2c0051",
+                    "on-tertiary-container": "#fffbff",
+                    "on-secondary-container": "#614283",
+                    "inverse-surface": "#342e38",
+                    "on-background": "#1f1a23",
+                    "outline": "#7e7385",
+                    "tertiary-fixed-dim": "#fabc4e",
+                    "surface-container-high": "#f0e5f2",
+                    "secondary": "#6f5092",
+                    "secondary-fixed": "#efdbff",
+                    "surface-container-low": "#fbf0fe",
+                    "outline-variant": "#cfc2d6",
+                    "on-tertiary-fixed": "#281900",
+                    "on-surface-variant": "#4d4354",
+                    "error-container": "#ffdad6",
+                    "primary-fixed-dim": "#ddb7ff",
+                    "error": "#ba1a1a",
+                    "background": "#fff7fe",
+                    "secondary-fixed-dim": "#dbb8ff",
+                    "on-tertiary-fixed-variant": "#604100",
+                    "surface-container": "#f5eaf8",
+                    "on-surface": "#1f1a23",
+                    "on-primary-fixed-variant": "#6900b3",
+                    "surface-variant": "#eadfed",
+                    "surface-tint": "#842bd2",
+                    "surface-bright": "#fff7fe",
+                    "on-secondary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-container-highest": "#eadfed",
+                    "primary": "#8127cf",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#9b6b00",
+                    "on-primary-container": "#fffbff",
+                    "on-error-container": "#93000a",
+                    "surface": "#fff7fe",
+                    "on-secondary-fixed-variant": "#573878",
+                    "primary-container": "#9c48ea",
+                    "inverse-on-surface": "#f8edfb",
+                    "tertiary-fixed": "#ffdead"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1200px",
+                    "stack-sm": "8px",
+                    "stack-lg": "48px",
+                    "margin-mobile": "20px",
+                    "gutter": "16px",
+                    "unit": "4px",
+                    "stack-md": "24px",
+                    "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "caption-xs": [
+                            "Inter"
+                    ],
+                    "headline-md-mobile": [
+                            "Inter"
+                    ],
+                    "body-base": [
+                            "Inter"
+                    ],
+                    "display-lg-mobile": [
+                            "Inter"
+                    ],
+                    "title-sm": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "headline-md": [
+                            "28px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "caption-xs": [
+                            "13px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "letterSpacing": "0.02em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-md-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-base": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "letterSpacing": "0",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display-lg-mobile": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "title-sm": [
+                            "22px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "36px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.surface-container-lowest');
+            color: theme('colors.on-surface');
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Subtle pulsing glow for floating elements */
+        @keyframes float-glow {
+            0% { transform: translateY(0px); box-shadow: 0 40px 80px -10px rgba(129, 39, 207, 0.03); }
+            50% { transform: translateY(-10px); box-shadow: 0 60px 100px -10px rgba(129, 39, 207, 0.08); }
+            100% { transform: translateY(0px); box-shadow: 0 40px 80px -10px rgba(129, 39, 207, 0.03); }
+        }
+
+        .floating-element {
+            animation: float-glow 6s ease-in-out infinite;
+        }
+        
+        .floating-element-delayed {
+            animation: float-glow 7s ease-in-out infinite;
+            animation-delay: 1.5s;
+        }
+        
+        .floating-element-fast {
+            animation: float-glow 5s ease-in-out infinite;
+            animation-delay: 0.5s;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased overflow-hidden">
+<!-- Suppress Main Nav Shell for Onboarding/Linear flow as per instructions -->
+<!-- Top Progress Bar Container -->
+<header class="w-full px-margin-mobile md:px-margin-desktop py-stack-md flex justify-between items-center z-50">
+<!-- Back Button (Ghost) -->
+<button class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center text-on-surface hover:bg-surface-variant transition-colors duration-300">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<!-- Progress Indicator -->
+<div class="flex flex-col items-center">
+<span class="font-caption-xs text-caption-xs text-outline mb-2">Step 1 of 3</span>
+<div class="flex gap-2">
+<div class="w-8 h-1 rounded-full bg-primary"></div>
+<div class="w-8 h-1 rounded-full bg-surface-variant"></div>
+<div class="w-8 h-1 rounded-full bg-surface-variant"></div>
+</div>
+</div>
+<!-- Skip Action -->
+<button class="font-caption-xs text-caption-xs text-on-surface-variant hover:text-primary transition-colors">
+            Skip
+        </button>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow flex flex-col items-center justify-center px-margin-mobile md:px-margin-desktop relative">
+<!-- Abstract Illustration Area (Floating Wallpapers) -->
+<div class="relative w-full max-w-lg aspect-square mb-stack-lg flex items-center justify-center">
+<!-- Central Main Image -->
+<div class="absolute w-[60%] h-[75%] rounded-[32px] overflow-hidden floating-element z-20 border border-white/50" data-alt="A highly aesthetic, minimalist 3D rendering of an ethereal glass sphere reflecting a serene sunset landscape. Soft, diffused lighting highlights the smooth, curved surfaces, emitting a gentle purple and warm orange glow. Designed as a premium digital wallpaper in a light-mode layout, maintaining a hyper-luxurious, clean aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCJcPWbsUrJZ_NMMymPxr_SLkiNuZvdtKD6p4r7lylnWj9yHBQOf2DO59l96LCSGpHN5Ucd8TS7usSKnYoOR6LSZ5S82EU9mmNaiiPw0A_4XUcEbhDgL6iA_MutO2oBeOPHiWB38xrk93o23SlV2DIx0-mOfODTnRXG3QV0D3xiHSGiTaJUJRriWthKglCvIX5U7V0pa7ojwCLTzqPYYz5Bio8erufHfjPy-MbjmVLi5pdHV54OUtU')">
+<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+</div>
+<!-- Left Background Image -->
+<div class="absolute w-[45%] h-[60%] rounded-[24px] overflow-hidden -ml-[40%] mt-[10%] floating-element-delayed z-10 opacity-80 blur-[1px] border border-white/40" data-alt="An abstract, flowing gradient composition featuring soft pastel tones of lavender, lilac, and pale blue. The shapes resemble liquid silk smoothly folding over itself. Lit softly to evoke a premium, airy aesthetic suitable for a high-end mobile interface background in light mode." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDegbDreOMasAibadzWM069k07jIA3E-s6BTmmGuu1WsElXZHD0g-R9GEXuEtbWtM2rjrz3beU1A3Odex9w7MJ6UFJLa-syHGBQW4S_0oD_TLdft0xW3Ps1IqIzQNLMyC-PrEYPbao_K5eYj73EVvtCfle8BabuH7t5RlQLDuPmav2XPxCygeXFJ0OlY2tG9PUA79BYLdCJxRvTJQ3haOg6lLhLdv0s3AAwleQojaoPgRwy13UMhgc')"></div>
+<!-- Right Background Image -->
+<div class="absolute w-[50%] h-[65%] rounded-[24px] overflow-hidden ml-[45%] -mt-[15%] floating-element-fast z-10 opacity-75 blur-[2px] border border-white/30" data-alt="A macro shot of crystalline structures in bright white and soft purple hues, demonstrating extreme precision and high-end texture. The lighting is pristine and cinematic, creating a sense of physical depth while adhering to a hyper-minimal luxury digital aesthetic appropriate for a wallpaper app." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBxN15nK34ITG5R0c87LbMCVMBf38bmFRX-CSN1QtHUMzH55dMhyjv7w-N1dDR0xFiAdv5aGfGB3fnMNupn0659QA2AKekd75YWVRkq7l4ObWBhuGFvWK29uNVada4d6ZEiQ2xTxi7AT-OxrIRKG3q5qd2rR1VGYj5OAOVZAJRMpGG2TFwnlLFwblcHl9Ga-gVjnYNZ728A7mz465DpMuhFh2geMW5SitwBshKNvI2IVM7EtafW3h4')"></div>
+<!-- Atmospheric Glow Background -->
+<div class="absolute inset-0 bg-primary-fixed-dim/20 blur-[100px] rounded-full z-0 transform scale-75"></div>
+</div>
+<!-- Typography & Copy -->
+<div class="text-center max-w-md w-full mb-stack-lg">
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-surface mb-stack-sm tracking-tighter">
+                Let's Personalize Your Experience
+            </h1>
+<p class="font-body-base text-body-base text-on-surface-variant max-w-[280px] mx-auto">
+                Choose the wallpapers you love and we'll build your perfect feed.
+            </p>
+</div>
+</main>
+<!-- Bottom Action Area -->
+<footer class="w-full px-margin-mobile md:px-margin-desktop pb-stack-lg pt-stack-sm flex justify-center pb-[max(env(safe-area-inset-bottom),2rem)]">
+<button class="w-full max-w-md h-[64px] bg-primary text-on-primary rounded-[24px] font-title-sm text-title-sm flex items-center justify-center gap-2 hover:bg-primary/90 hover:-translate-y-1 transition-all duration-300 shadow-[0_20px_40px_rgba(129,39,207,0.2)] active:scale-95 group">
+            Continue
+            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</footer>
+</body></html>

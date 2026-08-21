@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Onboarding - Choose Your Favorite Colors &amp; Device</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed": "#29074a",
+                      "primary-fixed": "#f0dbff",
+                      "secondary-container": "#d9b5ff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "inverse-primary": "#ddb7ff",
+                      "surface-dim": "#e1d7e4",
+                      "tertiary": "#7b5500",
+                      "on-primary-fixed": "#2c0051",
+                      "on-tertiary-container": "#fffbff",
+                      "on-secondary-container": "#614283",
+                      "inverse-surface": "#342e38",
+                      "on-background": "#1f1a23",
+                      "outline": "#7e7385",
+                      "tertiary-fixed-dim": "#fabc4e",
+                      "surface-container-high": "#f0e5f2",
+                      "secondary": "#6f5092",
+                      "secondary-fixed": "#efdbff",
+                      "surface-container-low": "#fbf0fe",
+                      "outline-variant": "#cfc2d6",
+                      "on-tertiary-fixed": "#281900",
+                      "on-surface-variant": "#4d4354",
+                      "error-container": "#ffdad6",
+                      "primary-fixed-dim": "#ddb7ff",
+                      "error": "#ba1a1a",
+                      "background": "#fff7fe",
+                      "secondary-fixed-dim": "#dbb8ff",
+                      "on-tertiary-fixed-variant": "#604100",
+                      "surface-container": "#f5eaf8",
+                      "on-surface": "#1f1a23",
+                      "on-primary-fixed-variant": "#6900b3",
+                      "surface-variant": "#eadfed",
+                      "surface-tint": "#842bd2",
+                      "surface-bright": "#fff7fe",
+                      "on-secondary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "surface-container-highest": "#eadfed",
+                      "primary": "#8127cf",
+                      "on-error": "#ffffff",
+                      "tertiary-container": "#9b6b00",
+                      "on-primary-container": "#fffbff",
+                      "on-error-container": "#93000a",
+                      "surface": "#fff7fe",
+                      "on-secondary-fixed-variant": "#573878",
+                      "primary-container": "#9c48ea",
+                      "inverse-on-surface": "#f8edfb",
+                      "tertiary-fixed": "#ffdead"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1200px",
+                      "stack-sm": "8px",
+                      "stack-lg": "48px",
+                      "margin-mobile": "20px",
+                      "gutter": "16px",
+                      "unit": "4px",
+                      "stack-md": "24px",
+                      "margin-desktop": "48px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "caption-xs": [
+                              "Inter"
+                      ],
+                      "headline-md-mobile": [
+                              "Inter"
+                      ],
+                      "body-base": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Inter"
+                      ],
+                      "title-sm": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "caption-xs": [
+                              "13px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-base": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "title-sm": [
+                              "22px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "36px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .color-option {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .color-option::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid theme('colors.primary');
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .color-option.selected {
+            transform: scale(0.9);
+        }
+
+        .color-option.selected::after {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .color-option.selected .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .check-icon {
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .device-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid theme('colors.outline-variant');
+            cursor: pointer;
+        }
+
+        .device-card.selected {
+            border-color: theme('colors.primary');
+            background-color: theme('colors.primary-container');
+            color: theme('colors.on-primary-container');
+            box-shadow: 0 10px 40px rgba(129, 39, 207, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .device-card.selected .device-icon {
+            color: theme('colors.on-primary-container');
+        }
+
+        .device-icon {
+            transition: color 0.3s ease;
+        }
+
+        /* Luminous Shadow for floating effect */
+        .luminous-shadow {
+            box-shadow: 0 20px 50px rgba(129, 39, 207, 0.05);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background-color: theme('colors.surface-variant');
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            width: 100%;
+            height: 100%;
+            background-color: theme('colors.primary');
+            border-radius: 2px;
+        }
+
+        /* Hide scrollbar for clean horizontal scroll */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen flex flex-col font-body-base antialiased">
+<!-- Top AppBar (Linear Flow, so no standard nav, just back/skip if needed) -->
+<header class="fixed top-0 w-full z-200 bg-surface/80 backdrop-blur-xl flex justify-between items-center px-margin-mobile md:px-margin-desktop py-stack-sm border-b border-white/10 luminous-shadow">
+<button aria-label="Go back" class="text-on-surface-variant hover:opacity-70 transition-opacity active:scale-95 p-2 -ml-2 rounded-full">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<span class="font-title-sm text-title-sm text-primary">Step 3 of 3</span>
+<button aria-label="Skip this step" class="text-on-surface-variant font-caption-xs text-caption-xs hover:opacity-70 transition-opacity p-2 -mr-2 rounded-full">
+            Skip
+        </button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full flex flex-col gap-stack-lg">
+<!-- Header Section -->
+<section class="text-center md:text-left pt-stack-sm">
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-surface mb-stack-sm tracking-tighter">Choose Your Favorite Colors</h1>
+<p class="font-body-base text-body-base text-on-surface-variant max-w-lg mx-auto md:mx-0">We'll recommend wallpapers based on your color preferences.</p>
+</section>
+<!-- Color Selection Grid -->
+<section class="w-full">
+<div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-gutter md:gap-stack-md justify-items-center">
+<!-- Black -->
+<div aria-checked="false" class="color-option w-16 h-16 md:w-20 md:h-20 rounded-full bg-black shadow-sm flex items-center justify-center" onclick="toggleColor(this)" role="checkbox" tabindex="0">
+<span class="material-symbols-outlined check-icon text-white text-3xl">check</span>
+</div>
+<!-- White -->
+<div aria-checked="false" class="color-option w-16 h-16 md:w-20 md:h-20 rounded-full bg-white border border-outline-variant shadow-sm flex items-center justify-center" onclick="toggleColor(this)" role="checkbox" tabindex="0">
+<span class="material-symbols-outlined check-icon text-black text-3xl">check</span>
+</div>
+<!-- Red -->
+<div aria-checked="false" class="color-option w-16 h-16 md:w-20 md:h-20 rounded-full bg-red-500 shadow-sm flex items-center justify-center" onclick="toggleColor(this)" role="checkbox" tabindex="0">
+<span class="material-symbols-outlined check-icon text-white text-3xl">check</span>
+</div>
+<!-- Blue -->
+<div aria-checked="false" class="color-option w-16 h-16 md:w-20 md:h-20 rounded-full bg-blue-500 shadow-sm flex items-center justify-center" onclick="toggleColor(this)" role="checkbox" tabindex="0">
+<span class="material-symbols-outlined check-icon text-white text-3xl">check</span>
+</div>
+<!-- Purple -->
+<div aria-checked="false" class="color-option w-16 h-16 md:w-20 md:h-20 rounded-full bg-purple-500 shadow-sm flex items-center justify-center" onclick="toggleColor(this)" role="checkbox" tabindex="0">
+<span class="material-symbols-outlined check-icon text-white text-3xl">check</span>
+</div>
+<!-- Pink -->
+<div aria-checked="false" class="color-option w-16 h-16 md:w-20 md:h-20 rounded-full bg-pink-400 shadow-sm flex items-center justify-center" onclick="toggleColor(this)" role="checkbox" tabindex="0">
+<span class="material-symbols-outlined check-icon text-white text-3xl">check</span>
+</div>
+<!-- Gold/Yellow -->
+<div aria-checked="false" class="color-option w-16 h-16 md:w-20 md:h-20 rounded-full bg-yellow-400 shadow-sm flex items-center justify-center" onclick="toggleColor(this)" role="checkbox" tabindex="0">
+<span class="material-symbols-outlined check-icon text-white text-3xl">check</span>
+</div>
+<!-- Green -->
+<div aria-checked="false" class="color-option w-16 h-16 md:w-20 md:h-20 rounded-full bg-emerald-400 shadow-sm flex items-center justify-center" onclick="toggleColor(this)" role="checkbox" tabindex="0">
+<span class="material-symbols-outlined check-icon text-white text-3xl">check</span>
+</div>
+</div>
+</section>
+<!-- Device Selection -->
+<section class="mt-stack-sm md:mt-stack-md">
+<h2 class="font-headline-md-mobile text-headline-md-mobile md:font-headline-md md:text-headline-md text-on-surface mb-stack-md">What Device Are You Using?</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+<!-- iPhone -->
+<div aria-checked="false" class="device-card p-6 rounded-[24px] bg-surface-container-lowest flex flex-col items-center justify-center gap-stack-sm" onclick="selectDevice(this)" role="radio" tabindex="0">
+<span class="material-symbols-outlined device-icon text-on-surface-variant text-4xl" style="font-variation-settings: 'FILL' 0;">smartphone</span>
+<span class="font-caption-xs text-caption-xs font-semibold text-center">iPhone</span>
+</div>
+<!-- Samsung -->
+<div aria-checked="false" class="device-card p-6 rounded-[24px] bg-surface-container-lowest flex flex-col items-center justify-center gap-stack-sm" onclick="selectDevice(this)" role="radio" tabindex="0">
+<span class="material-symbols-outlined device-icon text-on-surface-variant text-4xl" style="font-variation-settings: 'FILL' 0;">phone_android</span>
+<span class="font-caption-xs text-caption-xs font-semibold text-center">Samsung</span>
+</div>
+<!-- Google Pixel -->
+<div aria-checked="false" class="device-card p-6 rounded-[24px] bg-surface-container-lowest flex flex-col items-center justify-center gap-stack-sm" onclick="selectDevice(this)" role="radio" tabindex="0">
+<span class="material-symbols-outlined device-icon text-on-surface-variant text-4xl" style="font-variation-settings: 'FILL' 0;">devices</span>
+<span class="font-caption-xs text-caption-xs font-semibold text-center">Pixel</span>
+</div>
+<!-- Nothing -->
+<div aria-checked="false" class="device-card p-6 rounded-[24px] bg-surface-container-lowest flex flex-col items-center justify-center gap-stack-sm" onclick="selectDevice(this)" role="radio" tabindex="0">
+<span class="material-symbols-outlined device-icon text-on-surface-variant text-4xl" style="font-variation-settings: 'FILL' 0;">ad_units</span>
+<span class="font-caption-xs text-caption-xs font-semibold text-center">Nothing</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Action Area (Floating) -->
+<div class="fixed bottom-0 left-0 w-full p-margin-mobile md:p-margin-desktop bg-gradient-to-t from-background via-background/90 to-transparent z-100 flex justify-center pb-8 md:pb-12 pointer-events-none">
+<button class="pointer-events-auto w-full max-w-md h-[64px] bg-primary text-on-primary rounded-full font-title-sm text-title-sm flex items-center justify-center shadow-[0_20px_50px_rgba(129,39,207,0.25)] hover:bg-surface-tint hover:-translate-y-1 active:scale-95 transition-all duration-300">
+            Continue
+        </button>
+</div>
+<script>
+        // Multi-select for colors
+        function toggleColor(element) {
+            element.classList.toggle('selected');
+            const isChecked = element.getAttribute('aria-checked') === 'true';
+            element.setAttribute('aria-checked', !isChecked);
+        }
+
+        // Single-select for devices
+        function selectDevice(element) {
+            // Remove selected class from all device cards
+            const allDevices = document.querySelectorAll('.device-card');
+            allDevices.forEach(el => {
+                el.classList.remove('selected');
+                el.setAttribute('aria-checked', 'false');
+            });
+
+            // Add selected class to clicked card
+            element.classList.add('selected');
+            element.setAttribute('aria-checked', 'true');
+        }
+
+        // Add keyboard support for accessibility
+        document.querySelectorAll('[role="checkbox"], [role="radio"]').forEach(el => {
+            el.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (el.getAttribute('role') === 'checkbox') {
+                        toggleColor(el);
+                    } else {
+                        selectDevice(el);
+                    }
+                }
+            });
+        });
+    </script>
+</body></html>

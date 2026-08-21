@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Choose Your Style - Glint</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "secondary-fixed-dim": "#dbb8ff",
+                            "error-container": "#ffdad6",
+                            "primary": "#8127cf",
+                            "on-secondary-fixed": "#29074a",
+                            "tertiary-container": "#9b6b00",
+                            "on-tertiary-fixed-variant": "#604100",
+                            "background": "#fff7fe",
+                            "on-tertiary-fixed": "#281900",
+                            "primary-container": "#9c48ea",
+                            "on-primary": "#ffffff",
+                            "surface-container-low": "#fbf0fe",
+                            "tertiary-fixed": "#ffdead",
+                            "primary-fixed": "#f0dbff",
+                            "surface-container-lowest": "#ffffff",
+                            "outline": "#7e7385",
+                            "on-tertiary": "#ffffff",
+                            "surface": "#fff7fe",
+                            "on-primary-fixed-variant": "#6900b3",
+                            "on-surface": "#1f1a23",
+                            "error": "#ba1a1a",
+                            "outline-variant": "#cfc2d6",
+                            "surface-bright": "#fff7fe",
+                            "tertiary-fixed-dim": "#fabc4e",
+                            "on-surface-variant": "#4d4354",
+                            "surface-container-high": "#f0e5f2",
+                            "on-error": "#ffffff",
+                            "surface-tint": "#842bd2",
+                            "secondary-fixed": "#efdbff",
+                            "on-error-container": "#93000a",
+                            "on-secondary-container": "#614283",
+                            "on-secondary": "#ffffff",
+                            "on-primary-fixed": "#2c0051",
+                            "inverse-primary": "#ddb7ff",
+                            "secondary": "#6f5092",
+                            "tertiary": "#7b5500",
+                            "on-primary-container": "#fffbff",
+                            "on-tertiary-container": "#fffbff",
+                            "surface-container-highest": "#eadfed",
+                            "surface-dim": "#e1d7e4",
+                            "surface-container": "#f5eaf8",
+                            "surface-variant": "#eadfed",
+                            "primary-fixed-dim": "#ddb7ff",
+                            "on-secondary-fixed-variant": "#573878",
+                            "inverse-on-surface": "#f8edfb",
+                            "secondary-container": "#d9b5ff",
+                            "inverse-surface": "#342e38",
+                            "on-background": "#1f1a23"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "1rem",
+                            "lg": "2rem",
+                            "xl": "3rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "stack-md": "24px",
+                            "unit": "4px",
+                            "stack-sm": "8px",
+                            "margin-mobile": "20px",
+                            "container-max": "1200px",
+                            "margin-desktop": "48px",
+                            "gutter": "16px",
+                            "stack-lg": "48px"
+                    },
+                    "fontFamily": {
+                            "title-sm": [
+                                    "Inter"
+                            ],
+                            "headline-md-mobile": [
+                                    "Inter"
+                            ],
+                            "display-lg": [
+                                    "Inter"
+                            ],
+                            "body-base": [
+                                    "Inter"
+                            ],
+                            "caption-xs": [
+                                    "Inter"
+                            ],
+                            "display-lg-mobile": [
+                                    "Inter"
+                            ],
+                            "headline-md": [
+                                    "Inter"
+                            ]
+                    },
+                    "fontSize": {
+                            "title-sm": [
+                                    "22px",
+                                    {
+                                            "lineHeight": "1.4",
+                                            "letterSpacing": "-0.01em",
+                                            "fontWeight": "600"
+                                    }
+                            ],
+                            "headline-md-mobile": [
+                                    "24px",
+                                    {
+                                            "lineHeight": "1.3",
+                                            "fontWeight": "600"
+                                    }
+                            ],
+                            "display-lg": [
+                                    "36px",
+                                    {
+                                            "lineHeight": "1.2",
+                                            "letterSpacing": "-0.02em",
+                                            "fontWeight": "700"
+                                    }
+                            ],
+                            "body-base": [
+                                    "16px",
+                                    {
+                                            "lineHeight": "1.6",
+                                            "letterSpacing": "0",
+                                            "fontWeight": "400"
+                                    }
+                            ],
+                            "caption-xs": [
+                                    "13px",
+                                    {
+                                            "lineHeight": "1.4",
+                                            "letterSpacing": "0.02em",
+                                            "fontWeight": "500"
+                                    }
+                            ],
+                            "display-lg-mobile": [
+                                    "32px",
+                                    {
+                                            "lineHeight": "1.2",
+                                            "fontWeight": "700"
+                                    }
+                            ],
+                            "headline-md": [
+                                    "28px",
+                                    {
+                                            "lineHeight": "1.3",
+                                            "letterSpacing": "-0.01em",
+                                            "fontWeight": "600"
+                                    }
+                            ]
+                    }
+            },
+                },
+            }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+        
+        .style-card {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .style-card.selected {
+            box-shadow: 0 0 0 2px #8127cf, 0 20px 40px rgba(129, 39, 207, 0.15);
+            transform: translateY(-4px);
+        }
+        
+        .style-card:hover:not(.selected) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(129, 39, 207, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-base antialiased pb-32">
+<!-- Top Navigation (Transactional/Onboarding) -->
+<header class="fixed top-0 w-full z-200 bg-surface/80 backdrop-blur-xl border-b border-white/10 shadow-[0_20px_50px_rgba(129,39,207,0.05)]">
+<div class="flex justify-between items-center px-margin-mobile py-stack-sm md:px-margin-desktop">
+<button class="text-on-surface hover:opacity-70 transition-opacity duration-300 active:scale-95 flex items-center justify-center p-2 rounded-full">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-primary">Glint</div>
+<div class="font-caption-xs text-caption-xs text-on-surface-variant flex items-center space-x-1">
+<span>Step 4 of 5</span>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-1 bg-surface-variant">
+<div class="h-full bg-primary w-4/5"></div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-[100px] px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="mb-stack-lg text-center md:text-left mt-stack-md">
+<h1 class="font-headline-md-mobile text-headline-md-mobile md:font-headline-md md:text-headline-md text-on-surface mb-unit">Choose Your Style</h1>
+<p class="font-body-base text-body-base text-on-surface-variant">Select the aesthetic that defines your device.</p>
+</div>
+<!-- Grid Layout for Styles -->
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-gutter">
+<!-- Minimal -->
+<button class="style-card group relative aspect-[3/4] rounded-[2rem] overflow-hidden bg-surface-container text-left w-full focus:outline-none selected">
+<div class="absolute inset-0 bg-cover bg-center w-full h-full opacity-90 transition-transform duration-700 group-hover:scale-105" data-alt="A hyper-minimalist 3D abstract composition in pristine white and soft light grey. Simple geometric shapes, perfectly smooth spheres and soft rounded cubes resting on a seamless white infinite backdrop. The lighting is ethereal, creating soft, luminous shadows that feel premium and sophisticated. The aesthetic is clean, Apple-like, and highly polished, suitable for a high-end luxury wallpaper." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBKffwGm-lpjYQQXnf0WWNB_UIXd0uSEjPHYwqqWg8BVJ72Q38HPVrDoZIaT-4Vuy3caQ7Pb_WplHvKGwjVA-66WvtDcZHwc8ko8nFTqgSS_hMUyA0OKpKVucIeBFBtFSiLXo-LodzZMfgzSGDWiEVj_fMx0Rdf31qFr4WJ1BYIjIRiRLYSi8IbF9mn7x8AZkaWNqmndUZFyOQEJup18YyXJx_6EQ-1Svbd2eykxfgqMvpt9yr_Myg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-stack-sm md:p-gutter w-full">
+<h3 class="font-title-sm text-title-sm text-white mb-unit">Minimal</h3>
+</div>
+<!-- Selection Indicator -->
+<div class="absolute top-4 right-4 w-8 h-8 rounded-full bg-primary flex items-center justify-center opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-[20px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</button>
+<!-- Luxury -->
+<button class="style-card group relative aspect-[3/4] rounded-[2rem] overflow-hidden bg-surface-container text-left w-full focus:outline-none">
+<div class="absolute inset-0 bg-cover bg-center w-full h-full opacity-90 transition-transform duration-700 group-hover:scale-105" data-alt="A macro shot of luxurious metallic textures, specifically dark brushed titanium interwoven with subtle, elegant rose gold and deep purple accents. The surface is highly reflective yet smooth, resembling the back of a premium high-end smartphone or luxury watch. The lighting is dramatic, highlighting the precise craftsmanship and expensive material finish. The mood is rich, exclusive, and hyper-premium." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAATaWp1zh4GmHOCpSIrB4H-MWm0bS9NQDpDn-JdhtPzEY3sCIsxNAT5KKWxpSJ4HfRq8nHH1de-ierDV4SRMUvcAjCRz53aGqiIpb45hdpTIF3NFmxq_hYMNBq4x258s9Mkyz3ZxhMefIMOoFkwMZmLAsc2pHP7AyZFe8XDNtlt_JUsfX1yxGYPS7bi_SITUU2Q1uC1qeCzmink8BVeGI55ATRVFJKJQduQfexFKqHxflYWcUxgLU')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-stack-sm md:p-gutter w-full">
+<h3 class="font-title-sm text-title-sm text-white mb-unit">Luxury</h3>
+</div>
+<!-- Selection Indicator -->
+<div class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-[20px]">add</span>
+</div>
+</button>
+<!-- AMOLED -->
+<button class="style-card group relative aspect-[3/4] rounded-[2rem] overflow-hidden bg-surface-container text-left w-full focus:outline-none">
+<div class="absolute inset-0 bg-cover bg-center w-full h-full opacity-90 transition-transform duration-700 group-hover:scale-105" data-alt="Deep, pure black OLED background with an explosive, vibrant splash of neon purple, vivid cyan, and magenta liquid colors in the center. The colors are highly saturated and luminous, creating a striking contrast against the absolute black space. The texture of the paint is glossy and dynamic, frozen in mid-air. Designed specifically to showcase the deep contrast of AMOLED screens in a premium wallpaper style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCn7HHhqTncDioVsOiHih_kDkgYGpyWuuUR7w-7F5Tnqrxr38IQp4XdTYA0IuHRfumByi7ieOfomj9fRM4fPY89L6LtfRj3tHAsPS96UGYpHcPoRofpSNgbu1hIZ0qe6XIGQnBU3ZcbAXQUYrQ5xAVorBIUfHUbOXDKEHDDXwXktjvKdCDaTKRui_VHHqUm5kXhLVc7f9ZG31Mc9_A28acteNzX3RhaQ4G6HvlpYUS3JE-PklYPE88')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-stack-sm md:p-gutter w-full">
+<h3 class="font-title-sm text-title-sm text-white mb-unit">AMOLED</h3>
+</div>
+<div class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-[20px]">add</span>
+</div>
+</button>
+<!-- Glassmorphism -->
+<button class="style-card group relative aspect-[3/4] rounded-[2rem] overflow-hidden bg-surface-container text-left w-full focus:outline-none">
+<div class="absolute inset-0 bg-cover bg-center w-full h-full opacity-90 transition-transform duration-700 group-hover:scale-105" data-alt="Multiple layers of frosted, translucent glass floating over a soft, blurred background of pastel purple and light blue gradients. The glass panels have pristine, bright white highlights on their edges, creating a hyper-realistic glassmorphism effect. The depth of field is shallow, emphasizing the stacked layers and ethereal, floating UI aesthetic typical of high-end modern operating systems." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAlE1OoQ-EII8USFemZWyhHc1x9eAHZ-BNB27Cmd6Y3ervgUShl6sght7StN8tzyyngo3usSMNc_TOFCukWbewgm-l-DbcJL2p1jU5kSrJjaXBcjwuUVbV-3xSI1JNm40wtyxGi1CNL1Jw3ovw06aTQEqtFF-BjyaxpXl5Q9N1eGv85WTIef77ZVPdwGeMZCJpdq5f0GKiwQKFmd9WPZv5Go2fvejKaMVuaGoFlYSqJHcqVCaJ2ObA')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-stack-sm md:p-gutter w-full">
+<h3 class="font-title-sm text-title-sm text-white mb-unit">Glassmorphism</h3>
+</div>
+<div class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-[20px]">add</span>
+</div>
+</button>
+<!-- Modern -->
+<button class="style-card group relative aspect-[3/4] rounded-[2rem] overflow-hidden bg-surface-container text-left w-full focus:outline-none">
+<div class="absolute inset-0 bg-cover bg-center w-full h-full opacity-90 transition-transform duration-700 group-hover:scale-105" data-alt="Contemporary vector art illustration featuring smooth, flowing gradients in shades of lavender, deep purple, and soft peach. The shapes are organic, overlapping fluidly like gentle waves or liquid silk. The composition is balanced and calming, with a distinctly modern and elegant digital aesthetic suitable for a clean smartphone home screen." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBiiz-t8QXLUnsNhpokSS9dnLJH1qPoMw6bFzl47m7nOtm6yuvHGY4fBHqKA6zvsqmCJm0Le1Mu0hObDWCc06kFLB-rqHoSdVnciMCi2Ieyft77Cqfw7ec7_j1cQOvr5ZYkwPNlnvoz7DXBQH67cIRCqBXfczhbV316KBdAuDr8n467_42RYAJLeTQOg2hPIxBaWBB3dQfpCwYJMqSal3UD8onYAKvybJuzZVV58x1eD6txWJhls6o')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-stack-sm md:p-gutter w-full">
+<h3 class="font-title-sm text-title-sm text-white mb-unit">Modern</h3>
+</div>
+<div class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-[20px]">add</span>
+</div>
+</button>
+<!-- Nature -->
+<button class="style-card group relative aspect-[3/4] rounded-[2rem] overflow-hidden bg-surface-container text-left w-full focus:outline-none">
+<div class="absolute inset-0 bg-cover bg-center w-full h-full opacity-90 transition-transform duration-700 group-hover:scale-105" data-alt="A breathtaking, hyper-realistic macro photograph of a single dewdrop on a dark purple leaf, catching the soft morning light. The background is beautifully blurred into soft bokeh circles in deep greens and purples. The mood is serene, natural, yet elevated with a premium, almost magical quality. High clarity, perfect lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDlAA2bOqYgS-rK6khweurgHbYSSJkAGAPQoKUUA3Ze6XXFke0OsM6nQ5AY7bqHPEETrV2IiYDfe2peUmE1DUTevK3xuxa-0n7YcwKF8cX60gBP4q8JF4Q1f62Te-3D4QMxiugwVDYY9M8IHLvb6xp93pEJTdfQO342qW6bzZyruKCVCj0CjoV6QBzFtPTzm1z2nVEs7OEN4pu5ODw1Hv4zEYMxmiIsUBCfSDFpFCQSXUOX7iDYLUw')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-stack-sm md:p-gutter w-full">
+<h3 class="font-title-sm text-title-sm text-white mb-unit">Nature</h3>
+</div>
+<div class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-[20px]">add</span>
+</div>
+</button>
+<!-- Dark -->
+<button class="style-card group relative aspect-[3/4] rounded-[2rem] overflow-hidden bg-surface-container text-left w-full focus:outline-none">
+<div class="absolute inset-0 bg-cover bg-center w-full h-full opacity-90 transition-transform duration-700 group-hover:scale-105" data-alt="A moody, sophisticated dark mode wallpaper featuring subtle, dark grey topographical lines mapping over a matte black surface. Very subtle accents of glowing purple trace some of the lines, creating a sense of quiet energy. The overall feel is stealthy, professional, and highly textured without being visually noisy." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC7TEp8b59IuLRx7HzkSMHbAxVVVm3EyvuMRaeSTge6phn_QqeelhgpIKbBM7a5MJ_NEo4MeEwx_EwSWcX2MCzvYldhkNtDMZtHqEyvfuEa8CmeW4Xe7FRXqDsBJ5QHnXvk9qRuhR15Mn3PfpzG7hVHdJvkDPjb24wRkwAF_FSTk33AWsQuZyFvgCm59IL19hhIASWHk6WFx-zMRyzddk66WiV8_EDqju3ZEHs9ESADvQHGgH-ZdC4')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-stack-sm md:p-gutter w-full">
+<h3 class="font-title-sm text-title-sm text-white mb-unit">Dark</h3>
+</div>
+<div class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-[20px]">add</span>
+</div>
+</button>
+<!-- Cyberpunk -->
+<button class="style-card group relative aspect-[3/4] rounded-[2rem] overflow-hidden bg-surface-container text-left w-full focus:outline-none">
+<div class="absolute inset-0 bg-cover bg-center w-full h-full opacity-90 transition-transform duration-700 group-hover:scale-105" data-alt="A stylized, neon-drenched cyberpunk cityscape reflecting in a wet street, focusing purely on the abstract play of light rather than literal buildings. Intense glowing purple, electric blue, and harsh pink neon lights streak across the dark canvas. The mood is gritty yet high-tech, energetic, and atmospheric." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCli-uSMasPWtLX31t3ZHFQMqtMfT9uA25xL67r2PwQUoj-CC7fJs-kEuUPGooiVl2NbzJ3c9WsJQohZxpI65NNmMRlHBIBZZuz9fUd74HnyEQE3DdCYcTXL_74LO5-Ib_kWSAtmk8XN2DOY74DpjKwtE24JQSJqxFG6uI_6jq2ZOAUhiRxBMEAFdzdtCvISNi3N5WwwpVkkfNJ3ej5-vPAYmwr7nLaTbTByoHkDnG9EV06DxnnvHM')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-stack-sm md:p-gutter w-full">
+<h3 class="font-title-sm text-title-sm text-white mb-unit">Cyberpunk</h3>
+</div>
+<div class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-[20px]">add</span>
+</div>
+</button>
+</div>
+</main>
+<!-- Bottom Action Bar (Contextual) -->
+<div class="fixed bottom-0 left-0 w-full p-margin-mobile md:p-margin-desktop bg-gradient-to-t from-background via-background/80 to-transparent z-100">
+<div class="max-w-md mx-auto">
+<button class="w-full h-16 rounded-full bg-primary text-white font-headline-md-mobile text-headline-md-mobile flex items-center justify-center space-x-2 shadow-[0_20px_40px_rgba(129,39,207,0.3)] hover:opacity-90 active:scale-95 transition-all duration-300">
+<span>Continue</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<script>
+        // Simple script to handle selection toggling for demonstration
+        document.querySelectorAll('.style-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Deselect all
+                document.querySelectorAll('.style-card').forEach(c => {
+                    c.classList.remove('selected');
+                    const icon = c.querySelector('.material-symbols-outlined.text-\\[20px\\]');
+                    const iconContainer = c.querySelector('.rounded-full.opacity-100');
+                    if(iconContainer) {
+                        iconContainer.classList.remove('bg-primary', 'opacity-100');
+                        iconContainer.classList.add('bg-white/20', 'opacity-0');
+                    }
+                    if(icon) {
+                        icon.textContent = 'add';
+                        icon.style.fontVariationSettings = '';
+                    }
+                });
+
+                // Select clicked
+                this.classList.add('selected');
+                const icon = this.querySelector('.material-symbols-outlined.text-\\[20px\\]');
+                const iconContainer = this.querySelector('.rounded-full');
+                
+                if(iconContainer) {
+                    iconContainer.classList.remove('bg-white/20', 'opacity-0');
+                    iconContainer.classList.add('bg-primary', 'opacity-100');
+                }
+                
+                if(icon) {
+                    icon.textContent = 'check';
+                    icon.style.fontVariationSettings = "'FILL' 1";
+                }
+            });
+        });
+    </script>
+</body></html>

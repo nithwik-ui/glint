@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Onboarding - Discover</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "surface-bright": "#fff7fe",
+                      "primary-fixed-dim": "#ddb7ff",
+                      "on-tertiary-container": "#fffbff",
+                      "secondary": "#6f5092",
+                      "inverse-primary": "#ddb7ff",
+                      "background": "#fff7fe",
+                      "surface-container-highest": "#eadfed",
+                      "tertiary-fixed-dim": "#fabc4e",
+                      "on-primary-fixed-variant": "#6900b3",
+                      "on-tertiary-fixed": "#281900",
+                      "on-error-container": "#93000a",
+                      "surface-variant": "#eadfed",
+                      "secondary-fixed-dim": "#dbb8ff",
+                      "on-primary-container": "#fffbff",
+                      "on-background": "#1f1a23",
+                      "on-primary-fixed": "#2c0051",
+                      "secondary-fixed": "#efdbff",
+                      "outline": "#7e7385",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary-fixed": "#29074a",
+                      "surface-container": "#f5eaf8",
+                      "surface-dim": "#e1d7e4",
+                      "surface-container-high": "#f0e5f2",
+                      "inverse-on-surface": "#f8edfb",
+                      "primary": "#8127cf",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed": "#f0dbff",
+                      "tertiary": "#7b5500",
+                      "error-container": "#ffdad6",
+                      "tertiary-container": "#9b6b00",
+                      "on-tertiary-fixed-variant": "#604100",
+                      "on-primary": "#ffffff",
+                      "primary-container": "#9c48ea",
+                      "surface-container-low": "#fbf0fe",
+                      "error": "#ba1a1a",
+                      "tertiary-fixed": "#ffdead",
+                      "outline-variant": "#cfc2d6",
+                      "surface": "#fff7fe",
+                      "inverse-surface": "#342e38",
+                      "secondary-container": "#d9b5ff",
+                      "on-secondary-fixed-variant": "#573878",
+                      "surface-tint": "#842bd2",
+                      "on-surface-variant": "#4d4354",
+                      "on-secondary-container": "#614283",
+                      "on-surface": "#1f1a23"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-md": "24px",
+                      "stack-lg": "48px",
+                      "margin-mobile": "20px",
+                      "margin-desktop": "48px",
+                      "container-max": "1200px",
+                      "unit": "4px",
+                      "gutter": "16px",
+                      "stack-sm": "8px"
+              },
+              "fontFamily": {
+                      "display-lg-mobile": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "caption-xs": [
+                              "Inter"
+                      ],
+                      "headline-md-mobile": [
+                              "Inter"
+                      ],
+                      "body-base": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "title-sm": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "36px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "caption-xs": [
+                              "13px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-base": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "title-sm": [
+                              "22px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .parallax-layer {
+            position: absolute;
+            will-change: transform;
+            transition: transform 0.1s ease-out;
+        }
+        
+        .luminous-shadow {
+            box-shadow: 0 32px 64px rgba(129, 39, 207, 0.08);
+        }
+        
+        .accent-gradient {
+            background: linear-gradient(135deg, #8127cf 0%, #9c48ea 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen relative overflow-hidden flex flex-col items-center justify-center font-body-base antialiased">
+<!-- Floating Background Assets -->
+<div class="absolute inset-0 pointer-events-none overflow-hidden z-0" id="parallax-container">
+<!-- Abstract Shapes -->
+<div class="parallax-layer w-64 h-64 bg-primary-container/20 rounded-full blur-3xl" data-depth="0.2" style="top: -10%; left: -10%;"></div>
+<div class="parallax-layer w-96 h-96 bg-secondary-container/10 rounded-full blur-[80px]" data-depth="0.4" style="bottom: -20%; right: -20%;"></div>
+<!-- Floating Images -->
+<img class="parallax-layer w-32 h-48 rounded-xl object-cover opacity-60 shadow-[0_20px_50px_rgba(129,39,207,0.05)] blur-[2px]" data-alt="A macro shot of rippling, translucent purple liquid against a pristine white background. Soft, hyper-minimalist light mode aesthetic. The edges of the liquid glow with a faint violet luminosity, creating a glassmorphic feel." data-depth="0.6" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg" style="top: 15%; left: 10%; transform: rotate(-15deg);"/>
+<img class="parallax-layer w-40 h-56 rounded-xl object-cover opacity-50 shadow-[0_20px_50px_rgba(129,39,207,0.05)] blur-[4px]" data-alt="An ethereal, abstract landscape featuring rolling sand dunes rendered in pure white and pale lavender. High-end, luxury wallpaper aesthetic. The lighting is soft and diffused, emphasizing the smooth, sweeping curves of the landscape." data-depth="0.3" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg" style="bottom: 25%; right: 5%; transform: rotate(10deg);"/>
+<img class="parallax-layer w-24 h-24 rounded-full object-cover opacity-40 shadow-[0_20px_50px_rgba(129,39,207,0.05)] blur-[1px]" data-alt="A minimalist 3D render of frosted glass geometric shapes (spheres and cubes) resting on a clean white surface. Soft shadows and subtle internal refractions in light purple hues. Premium hardware interface aesthetic." data-depth="0.8" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg" style="top: 40%; right: 15%;"/>
+</div>
+<!-- Main Content Container -->
+<main class="relative z-10 flex flex-col items-center w-full max-w-md px-margin-mobile h-[100dvh] justify-between py-12">
+<!-- Top Spacer -->
+<div class="flex-1 w-full flex items-center justify-center">
+<!-- Premium Wallpaper Mockup -->
+<div class="relative w-full max-w-[280px] aspect-[9/19] rounded-[2rem] p-2 bg-white/40 backdrop-blur-md border border-white/60 luminous-shadow z-20 mx-auto">
+<!-- Screen Area -->
+<div class="w-full h-full rounded-[1.5rem] overflow-hidden relative bg-black">
+<img class="w-full h-full object-cover absolute inset-0" data-alt="A breathtaking, hyper-realistic 4K landscape photograph of a serene mountain lake at dawn. The color palette is minimal, focusing on icy whites, soft grays, and delicate purple morning light reflecting off the still water. It feels expansive and premium." src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<!-- Mock UI Elements on Screen -->
+<div class="absolute top-4 w-full flex justify-center">
+<div class="w-24 h-6 bg-black/40 backdrop-blur-xl rounded-full"></div>
+</div>
+<div class="absolute bottom-6 w-full flex flex-col items-center gap-4">
+<div class="w-16 h-16 rounded-full border-2 border-white/50 backdrop-blur-md"></div>
+<div class="flex gap-4">
+<div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm"></div>
+<div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Text & Actions Container -->
+<div class="w-full flex flex-col items-center text-center gap-stack-md pt-8">
+<div class="space-y-4">
+<!-- Progress Indicators -->
+<div class="flex justify-center gap-2 mb-6">
+<div class="w-6 h-1.5 rounded-full bg-primary"></div>
+<div class="w-2 h-1.5 rounded-full bg-surface-dim"></div>
+<div class="w-2 h-1.5 rounded-full bg-surface-dim"></div>
+</div>
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-on-surface">
+                    Discover Premium Wallpapers
+                </h1>
+<p class="font-body-base text-body-base text-on-surface-variant max-w-[280px] mx-auto leading-relaxed">
+                    Thousands of beautiful 4K wallpapers curated for your phone.
+                </p>
+</div>
+<!-- Buttons -->
+<div class="w-full flex flex-col gap-4 mt-4">
+<button class="w-full h-[64px] rounded-xl accent-gradient text-on-primary font-title-sm text-title-sm flex items-center justify-center luminous-shadow hover:opacity-90 active:scale-[0.98] transition-all duration-300">
+                    Continue
+                </button>
+<button class="w-full h-[56px] rounded-xl text-on-surface-variant font-body-base text-body-base hover:bg-surface-dim/50 active:scale-[0.98] transition-all duration-300">
+                    Skip
+                </button>
+</div>
+</div>
+</main>
+<script>
+        // Subtle Parallax Effect
+        document</script></body></html>

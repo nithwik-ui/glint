@@ -1,0 +1,28 @@
+# Glint Root .gitignore
+
+# Backend
+**/node_modules/
+**/.env
+**/logs/
+*.log
+
+# Frontend
+**/doc/api/
+**/.last_build_id
+**/.dart_tool/
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
+**/build/
+**/coverage/
+
+# IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# System files
+.DS_Store
+Thumbs.db

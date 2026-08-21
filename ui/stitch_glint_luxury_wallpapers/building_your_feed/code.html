@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Building Your Feed - Glint</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config injected from system prompt -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#29074a",
+                        "primary-fixed": "#f0dbff",
+                        "secondary-container": "#d9b5ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#ddb7ff",
+                        "surface-dim": "#e1d7e4",
+                        "tertiary": "#7b5500",
+                        "on-primary-fixed": "#2c0051",
+                        "on-tertiary-container": "#fffbff",
+                        "on-secondary-container": "#614283",
+                        "inverse-surface": "#342e38",
+                        "on-background": "#1f1a23",
+                        "outline": "#7e7385",
+                        "tertiary-fixed-dim": "#fabc4e",
+                        "surface-container-high": "#f0e5f2",
+                        "secondary": "#6f5092",
+                        "secondary-fixed": "#efdbff",
+                        "surface-container-low": "#fbf0fe",
+                        "outline-variant": "#cfc2d6",
+                        "on-tertiary-fixed": "#281900",
+                        "on-surface-variant": "#4d4354",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#ddb7ff",
+                        "error": "#ba1a1a",
+                        "background": "#fff7fe",
+                        "secondary-fixed-dim": "#dbb8ff",
+                        "on-tertiary-fixed-variant": "#604100",
+                        "surface-container": "#f5eaf8",
+                        "on-surface": "#1f1a23",
+                        "on-primary-fixed-variant": "#6900b3",
+                        "surface-variant": "#eadfed",
+                        "surface-tint": "#842bd2",
+                        "surface-bright": "#fff7fe",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#eadfed",
+                        "primary": "#8127cf",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#9b6b00",
+                        "on-primary-container": "#fffbff",
+                        "on-error-container": "#93000a",
+                        "surface": "#fff7fe",
+                        "on-secondary-fixed-variant": "#573878",
+                        "primary-container": "#9c48ea",
+                        "inverse-on-surface": "#f8edfb",
+                        "tertiary-fixed": "#ffdead"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1200px",
+                        "stack-sm": "8px",
+                        "stack-lg": "48px",
+                        "margin-mobile": "20px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "stack-md": "24px",
+                        "margin-desktop": "48px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "caption-xs": ["Inter"],
+                        "headline-md-mobile": ["Inter"],
+                        "body-base": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["28px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "caption-xs": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-md-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-base": ["16px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "title-sm": ["22px", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Base Styles & Animations */
+        body {
+            background-color: #fff7fe; /* background */
+            color: #1f1a23; /* on-background */
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        .luminous-shadow {
+            box-shadow: 0 0 80px 10px rgba(129,39,207,0.08); /* primary color tint */
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* Float Animations for Background Cards */
+        @keyframes float-1 {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+        }
+        @keyframes float-2 {
+            0%, 100% { transform: translateY(0) rotate(3deg); }
+            50% { transform: translateY(-30px) rotate(-1deg); }
+        }
+        @keyframes float-3 {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.02); }
+        }
+
+        .bg-card-1 { animation: float-1 8s ease-in-out infinite; }
+        .bg-card-2 { animation: float-2 12s ease-in-out infinite; }
+        .bg-card-3 { animation: float-3 10s ease-in-out infinite; }
+        .bg-card-4 { animation: float-1 14s ease-in-out infinite reverse; }
+        
+        /* Spinner */
+        .spinner-ring {
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            animation: dash 2s ease-in-out infinite, rotate 2s linear infinite;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes dash {
+            0% { stroke-dashoffset: 283; }
+            50% { stroke-dashoffset: 70; transform: rotate(45deg); }
+            100% { stroke-dashoffset: 283; transform: rotate(360deg); }
+        }
+
+        /* Pulse glow */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+        .glow-effect {
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+
+        /* Text Crossfade */
+        .status-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform: translateY(10px);
+        }
+        .status-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Final State Transition */
+        #loading-container {
+            transition: opacity 1s ease-in-out, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        #success-container {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+            transition: opacity 1s ease-in-out, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .show-success #loading-container {
+            opacity: 0;
+            transform: scale(1.05);
+            pointer-events: none;
+        }
+        .show-success #success-container {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="relative w-full h-screen flex items-center justify-center">
+<!-- Ambient Background Glow -->
+<div class="absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
+<div class="w-[80vw] h-[80vw] max-w-[800px] max-h-[800px] rounded-full bg-primary-fixed-dim/30 blur-[100px] glow-effect"></div>
+</div>
+<!-- Floating Background Cards (Abstract Wallpapers) -->
+<div class="absolute inset-0 z-10 overflow-hidden opacity-40 pointer-events-none">
+<!-- Top Left -->
+<div class="absolute -top-10 -left-10 w-64 h-80 rounded-xl overflow-hidden bg-card-1 luminous-shadow rotate-[-10deg]">
+<img class="w-full h-full object-cover" data-alt="A luxurious, abstract minimal digital artwork. Soft fluid waves of pale lavender and pure white intersecting in a 3D space. The lighting is extremely soft and diffused, creating a serene, high-end light-mode aesthetic. Smooth gradients, glass-like textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUJLltn4uH0to9PFh5qw-nbXy51i_nshWkFFoZu9OGQjsND51VbjGH_7KVuIpFDDoEm2jumo85edyoyBO6n67O2aa6ofOpQ8RPcALTZYfSlvifTKY7H9Oqg52gfIwZUqjqwZ-dppDofXSXsa4v2KHj0ksBS7DAO1wEt2R9pxjhSTEv3LGhfFZii80KJy9r_O5RnQ5WdJly-Ts1xjan1X3NYomMD8mkmlypcxUh-iIqY0CbHhP-EcU"/>
+</div>
+<!-- Top Right -->
+<div class="absolute top-20 -right-20 w-72 h-96 rounded-xl overflow-hidden bg-card-2 luminous-shadow rotate-[15deg]">
+<img class="w-full h-full object-cover" data-alt="Abstract minimalist 3D rendering. Floating geometric primitive shapes, primarily frosted glass spheres and metallic silver cylinders, arranged artfully against a clean white backdrop. Soft lighting with subtle purple undertones reflecting off the glass. Premium, sleek wallpaper aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3vrIKnVegXTARy_RpOGCha4FDr53x5b_1Y3DBSQD4QwzOco0UbQv8xxqYzoOqhnhe4DfqXExu9uQaZN2dVsTa-rzIqw9WpXkg0ePpPmYpgQQZZ5keUVpSGEVpPf0LDP4Nisth5FcnzfqZRFmb6zvad79WboAkkfutK7ftqAKYx3yP0_6UWDLq8vjXVsyhk_qciBBmIoN2TZj1ulQf9ax9FQjh_n3T-w8l5wmK491HneDfF9ROPSY"/>
+</div>
+<!-- Bottom Left -->
+<div class="absolute bottom-10 -left-20 w-80 h-64 rounded-xl overflow-hidden bg-card-3 luminous-shadow rotate-[5deg]">
+<img class="w-full h-full object-cover" data-alt="A serene landscape re-imagined in a minimalist, hyper-stylized way. Rolling dunes of pristine white sand beneath a soft, pale amethyst sky. Delicate, ethereal lighting casting long, soft shadows. Clean, expansive negative space. Modern light-mode luxury design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC4YWcMs_-cMSe5ZxWG8B1BdZZkmzDihCb8PR7-VoxFQSJJhUZujbvis-624XlxJV1v_1gcv1sovxupFM6714d9fD9uxXU2EoBAvwlbUW8Uesaa0DzLPv4ABj9AOphYd7Zha6lVIZ2FXEtl1pOz0VCkhQh0T2357EGmWjykj_XTMG0GVNDnpwKWPFlIVb-crcBP3RNcNY9kPPiRRMQvSJEYxhxhlNy8yoe1GdlVQ4yWhJ_fKqbx6o"/>
+</div>
+<!-- Bottom Right -->
+<div class="absolute -bottom-10 right-10 w-64 h-80 rounded-xl overflow-hidden bg-card-4 luminous-shadow rotate-[-15deg]">
+<img class="w-full h-full object-cover" data-alt="Close-up macro shot of layered frosted glass panels. Soft light refracting through the edges, creating subtle prisms of color, predominantly pale violet and white. High-end, pristine texture. Minimalist and ethereal digital wallpaper." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAvel8x5g3IxboAdQNstvBlGDZ_Wy2WJxPnGapx3P_82M1O7k1YyBizUhDGUkyhUyjPA9RDGUMvtKN8Gixo3eNrTkM8qwZVbCuNdF42hXO2-z7uPavS_nRALBPfHh3CfnRFmhf2DIqX6q6nJKGEf09CF7P1fyVxHAIZ1WfBsWCe_P83Pp_MYJhwW6o6Adwu30f4YwrS5o7UKjhWDG79yN_Y3fBnj9cipGde2PJEgc5lybvlyc-lwg"/>
+</div>
+</div>
+<!-- Main Content Canvas -->
+<main class="relative z-100 w-[90%] max-w-md">
+<!-- Loading Phase -->
+<div class="flex flex-col items-center justify-center glass-panel rounded-xl p-stack-lg luminous-shadow" id="loading-container">
+<!-- Central Progress Animation -->
+<div class="relative w-24 h-24 mb-stack-md flex items-center justify-center">
+<!-- Static faint ring -->
+<svg class="absolute inset-0 w-full h-full text-surface-variant" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-width="4"></circle>
+</svg>
+<!-- Animated progress ring -->
+<svg class="absolute inset-0 w-full h-full text-primary" style="transform: rotate(-90deg);" viewbox="0 0 100 100">
+<circle class="spinner-ring" cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<!-- Inner Brand Icon -->
+<div class="w-12 h-12 bg-primary-container text-on-primary-container rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; font-size: 24px;">auto_awesome</span>
+</div>
+</div>
+<!-- Rotating Status Messages -->
+<div class="relative w-full h-8 flex justify-center">
+<div class="status-text active font-title-sm text-title-sm text-on-surface">Analyzing Preferences...</div>
+<div class="status-text font-title-sm text-title-sm text-on-surface">Building Collections...</div>
+<div class="status-text font-title-sm text-title-sm text-on-surface">Finding Wallpapers...</div>
+<div class="status-text font-title-sm text-title-sm text-on-surface">Creating Your Home Feed...</div>
+</div>
+<p class="font-body-base text-body-base text-on-surface-variant mt-stack-sm text-center">
+                Curating the perfect pixels for your screen.
+            </p>
+</div>
+<!-- Success Phase (Initially Hidden) -->
+<div class="absolute inset-0 flex flex-col items-center justify-center glass-panel rounded-xl p-stack-lg luminous-shadow" id="success-container">
+<div class="w-24 h-24 mb-stack-md bg-primary text-on-primary rounded-full flex items-center justify-center shadow-[0_20px_40px_rgba(129,39,207,0.3)]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; font-size: 40px;">check</span>
+</div>
+<h1 class="font-headline-md-mobile md:font-headline-md text-headline-md-mobile md:text-headline-md text-on-surface text-center mb-stack-sm">
+                Your Personalized<br/>Wallpaper World<br/>Is Ready
+            </h1>
+<p class="font-body-base text-body-base text-on-surface-variant text-center mb-stack-lg">
+                Dive into a collection crafted just for you.
+            </p>
+<button class="w-full bg-primary hover:bg-primary/90 text-on-primary font-title-sm text-title-sm py-4 rounded-full transition-transform active:scale-95 shadow-[0_10px_30px_rgba(129,39,207,0.2)]">
+                Enter Glint
+            </button>
+</div>
+</main>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const statusMessages = document.querySelectorAll('.status-text');
+            let currentIndex = 0;
+            const messageDuration = 2000; // time per message
+
+            // Rotate messages
+            const interval = setInterval(() => {
+                statusMessages[currentIndex].classList.remove('active');
+                currentIndex++;
+
+                if (currentIndex < statusMessages.length) {
+                    statusMessages[currentIndex].classList.add('active');
+                } else {
+                    // All messages shown, trigger finish
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.body.classList.add('show-success');
+                    }, 500); // slight delay after last message
+                }
+            }, messageDuration);
+        });
+    </script>
+</body></html>

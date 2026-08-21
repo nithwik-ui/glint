@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Glint - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#fff7fe",
+                        "primary-fixed-dim": "#ddb7ff",
+                        "on-tertiary-container": "#fffbff",
+                        "secondary": "#6f5092",
+                        "inverse-primary": "#ddb7ff",
+                        "background": "#fff7fe",
+                        "surface-container-highest": "#eadfed",
+                        "tertiary-fixed-dim": "#fabc4e",
+                        "on-primary-fixed-variant": "#6900b3",
+                        "on-tertiary-fixed": "#281900",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#eadfed",
+                        "secondary-fixed-dim": "#dbb8ff",
+                        "on-primary-container": "#fffbff",
+                        "on-background": "#1f1a23",
+                        "on-primary-fixed": "#2c0051",
+                        "secondary-fixed": "#efdbff",
+                        "outline": "#7e7385",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#29074a",
+                        "surface-container": "#f5eaf8",
+                        "surface-dim": "#e1d7e4",
+                        "surface-container-high": "#f0e5f2",
+                        "inverse-on-surface": "#f8edfb",
+                        "primary": "#8127cf",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#f0dbff",
+                        "tertiary": "#7b5500",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#9b6b00",
+                        "on-tertiary-fixed-variant": "#604100",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#9c48ea",
+                        "surface-container-low": "#fbf0fe",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdead",
+                        "outline-variant": "#cfc2d6",
+                        "surface": "#fff7fe",
+                        "inverse-surface": "#342e38",
+                        "secondary-container": "#d9b5ff",
+                        "on-secondary-fixed-variant": "#573878",
+                        "surface-tint": "#842bd2",
+                        "on-surface-variant": "#4d4354",
+                        "on-secondary-container": "#614283",
+                        "on-surface": "#1f1a23"
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        lg: "2rem",
+                        xl: "3rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        "stack-md": "24px",
+                        "stack-lg": "48px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "48px",
+                        "container-max": "1200px",
+                        "unit": "4px",
+                        "gutter": "16px",
+                        "stack-sm": "8px"
+                    },
+                    fontFamily: {
+                        "display-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "caption-xs": ["Inter"],
+                        "headline-md-mobile": ["Inter"],
+                        "body-base": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "title-sm": ["Inter"]
+                    },
+                    fontSize: {
+                        "display-lg-mobile": ["32px", { lineHeight: "1.2", fontWeight: "700" }],
+                        "display-lg": ["36px", { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "caption-xs": ["13px", { lineHeight: "1.4", letterSpacing: "0.02em", fontWeight: "500" }],
+                        "headline-md-mobile": ["24px", { lineHeight: "1.3", fontWeight: "600" }],
+                        "body-base": ["16px", { lineHeight: "1.6", letterSpacing: "0", fontWeight: "400" }],
+                        "headline-md": ["28px", { lineHeight: "1.3", letterSpacing: "-0.01em", fontWeight: "600" }],
+                        "title-sm": ["22px", { lineHeight: "1.4", letterSpacing: "-0.01em", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Custom scrollbar for horizontal scrolling areas */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="pb-32 pt-24 font-body-base antialiased">
+<!-- TopAppBar -->
+<header class="bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl fixed top-0 w-full z-200 border-b border-white/10 shadow-[0_20px_50px_rgba(129,39,207,0.05)]">
+<div class="flex justify-between items-center px-margin-mobile py-stack-sm md:px-margin-desktop max-w-container-max mx-auto">
+<!-- Leading / Brand -->
+<div class="flex items-center gap-2 hover:opacity-70 transition-opacity duration-300 cursor-pointer active:scale-95 transition-transform">
+<img alt="Glint Logo" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAv67KtuPQ6y2PUNcEwvndvoXszzWCijy_aNASpmhrS6Pl9XhwCXlH5YwGA20OOSjhDRn7Ie0nPrfDD7abc4sPgU0zq_FqmibO9a7kMUUXXAE_I9z82YBpj0z-R4Q2sCo_B5gYE8_XWaBmCIsXJJhjSC7njxZyiJLd7lbrNsMLEQCv_HXUx-Oq_baUKTZrpExSR9X4peHn5679n95zViiAVUBW7O6dgEKubY0uxpbZUZQFfGz-CX2k"/>
+<span class="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-primary dark:text-primary-fixed-dim md:hidden">Glint</span>
+<span class="font-display-lg text-display-lg tracking-tighter text-primary dark:text-primary-fixed-dim hidden md:inline">Glint</span>
+</div>
+<!-- Search Bar (Center Web, Hidden Mobile) -->
+<div class="hidden md:flex flex-1 max-w-md mx-8 relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full h-14 pl-12 pr-4 rounded-[24px] bg-surface-container-highest border-none focus:ring-2 focus:ring-primary/50 outline-none transition-all duration-300 font-body-base text-body-base text-on-surface placeholder:text-on-surface-variant/70 shadow-[0_4px_20px_rgba(129,39,207,0.03)] focus:shadow-[0_4px_30px_rgba(129,39,207,0.15)]" placeholder="Search wallpapers..." type="text"/>
+</div>
+<!-- Trailing -->
+<div class="flex items-center gap-4">
+<button class="md:hidden text-on-surface-variant dark:text-outline-variant hover:opacity-70 transition-opacity duration-300 active:scale-95 transition-transform p-2">
+<span class="material-symbols-outlined text-[28px]">search</span>
+</button>
+<button class="text-on-surface-variant dark:text-outline-variant hover:opacity-70 transition-opacity duration-300 active:scale-95 transition-transform p-2 relative">
+<span class="material-symbols-outlined text-[28px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full shadow-[0_0_10px_rgba(186,26,26,0.5)]"></span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop space-y-stack-lg overflow-x-hidden">
+<!-- Categories Chips -->
+<section>
+<div class="flex gap-gutter overflow-x-auto hide-scrollbar pb-4 pt-2 -mx-margin-mobile px-margin-mobile md:mx-0 md:px-0">
+<button class="whitespace-nowrap px-6 py-3 rounded-full bg-primary text-on-primary font-body-base text-body-base shadow-[0_8px_20px_rgba(129,39,207,0.2)] transition-transform active:scale-95">All</button>
+<button class="whitespace-nowrap px-6 py-3 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant font-body-base text-body-base hover:bg-surface-container transition-colors active:scale-95">Nature</button>
+<button class="whitespace-nowrap px-6 py-3 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant font-body-base text-body-base hover:bg-surface-container transition-colors active:scale-95">AMOLED</button>
+<button class="whitespace-nowrap px-6 py-3 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant font-body-base text-body-base hover:bg-surface-container transition-colors active:scale-95">Space</button>
+<button class="whitespace-nowrap px-6 py-3 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant font-body-base text-body-base hover:bg-surface-container transition-colors active:scale-95">Minimal</button>
+<button class="whitespace-nowrap px-6 py-3 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant font-body-base text-body-base hover:bg-surface-container transition-colors active:scale-95">Abstract</button>
+</div>
+</section>
+<!-- Hero Banner: Wallpaper of the Day -->
+<section>
+<h2 class="font-headline-md-mobile text-headline-md-mobile md:font-headline-md md:text-headline-md text-on-background mb-stack-md">Wallpaper of the Day</h2>
+<div class="relative w-full h-[400px] md:h-[500px] rounded-xl overflow-hidden shadow-[0_30px_60px_rgba(129,39,207,0.1)] group cursor-pointer transition-transform duration-500 hover:scale-[1.01]">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A breathtaking, hyper-realistic digital landscape of a serene mountain lake at dawn. The scene features ethereal, glowing purple mist rolling over pristine, glass-like water, reflecting majestic peaks. High-key, luminous lighting creates a hyper-minimal luxury aesthetic, with a soft, expansive depth of field. The color palette centers on pristine whites, soft greys, and striking accents of deep, electric violet (#8127cf). The mood is tranquil, expensive, and otherworldly, designed perfectly for a premium light-mode wallpaper application." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCm89Ekjrb2KN5Up90_G1xsJ66j36xCsCbuCyoEv2XkqT2XXfI2gGADVPI0TVbTMS9tMeUus0h-J-p-NbAM-fja2me2A6U08EZ0iitdVpRMTDVlRslKEJLLPDfBwfH4xLJn0bFkrKIJxilNrqa67V1PepUSUNL4FIs-0Ty8DuFRSvQlAOa-TDDAXPGXj2BmtNeCo7tHg8snWkNNiZJz7v6riK5AoSKWR6jiFQ6k9c5PH2kmiM-k7HA')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+<div class="absolute inset-0 p-margin-mobile md:p-margin-desktop flex flex-col justify-end">
+<div class="flex justify-between items-end">
+<div>
+<span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-white text-xs font-medium mb-3 border border-white/30">Exclusive</span>
+<h3 class="font-title-sm text-title-sm text-white mb-1 drop-shadow-md">Ethereal Peaks</h3>
+<p class="font-body-base text-body-base text-white/80 drop-shadow-md">By Studio Aurora</p>
+</div>
+<button class="w-14 h-14 rounded-full bg-primary/90 backdrop-blur-md flex items-center justify-center text-white shadow-[0_10px_30px_rgba(129,39,207,0.4)] hover:bg-primary transition-colors active:scale-90 border border-white/20">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">download</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Trending Section -->
+<section>
+<div class="flex justify-between items-end mb-stack-md">
+<h2 class="font-headline-md-mobile text-headline-md-mobile md:font-headline-md md:text-headline-md text-on-background">Trending Now</h2>
+<button class="text-primary font-body-base text-body-base hover:opacity-70 transition-opacity">See all</button>
+</div>
+<div class="flex gap-gutter overflow-x-auto hide-scrollbar pb-8 -mx-margin-mobile px-margin-mobile md:mx-0 md:px-0 pt-2">
+<!-- Trending Card 1 -->
+<div class="min-w-[280px] w-[280px] h-[380px] rounded-lg overflow-hidden relative group shadow-[0_20px_50px_rgba(129,39,207,0.05)] flex-shrink-0 cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="Abstract 3D digital art featuring fluid, liquid glass shapes suspended in a bright, white void. Soft, internal illumination within the glass refracts gentle hues of lavender and gold. The composition is minimal and balanced, emphasizing negative space and hyper-realistic textures. The aesthetic is luxurious and pristine, fitting perfectly into a high-end, light-mode design system. The mood is calm and sophisticated." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBgRQv_mqQe2UaVbwTp45GybbX9syn6SAqQkWHuiRUXL2kZ_QGtZ9ijpTWHhOg99LQG8bRf7NXxrckku4QIH_LnVZdbDWsEQ2hquUuZlioQ8r2qOjWNg9fq7kkciuP4QROkamqSgMZD5uLp2rHb5MqLrybpHv2SKZtKSa_HuH8nGAqNVte9ZdsVcFvNCZJ2wuejTiaFxkormyIjOAiltNmFPDpD8zQ0Sh5Frs9yksMHYMh4UA2neWo')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
+<span class="text-white font-body-base text-body-base drop-shadow-md">Liquid Aura</span>
+<button class="p-2 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/40 transition-colors">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+</button>
+</div>
+</div>
+<!-- Trending Card 2 -->
+<div class="min-w-[280px] w-[280px] h-[380px] rounded-lg overflow-hidden relative group shadow-[0_20px_50px_rgba(129,39,207,0.05)] flex-shrink-0 cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A minimalist architectural photograph of a smooth, sweeping white concrete structure against a clear, pale purple sky. The lighting creates sharp, clean shadows that emphasize the geometric curves. The aesthetic is highly polished, modern, and spacious, utilizing a stark white and soft purple palette. The image conveys a sense of expensive, hyper-minimalist design, ideal for a premium digital wallpaper." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDtmkWv9XI90UEY-sp0dwiZY34pr7yO07A3jf2G8rQC8UXNhDzky4Qp0h6zW-ygcD0a1rVx28fiOZ2hhD1Lc9QkkGL7887siR6JW8io-39N0ySHrKqIax4TY3p9Uo7_j7yH7UHUg0pkguvHPsYlpzlo-5vEqOHYJJR6i6LxqtQRjYMEEZ97Kg7Rq5pb8Tq7Z9D7orRKLM1C6ARHB-0VWxJFrUA78r1Gjf-Zpbs8-sR6AtW9Jec4PpU')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
+<span class="text-white font-body-base text-body-base drop-shadow-md">Curve Architecture</span>
+<button class="p-2 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/40 transition-colors">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+</button>
+</div>
+</div>
+<!-- Trending Card 3 -->
+<div class="min-w-[280px] w-[280px] h-[380px] rounded-lg overflow-hidden relative group shadow-[0_20px_50px_rgba(129,39,207,0.05)] flex-shrink-0 cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A macro photograph of a delicate, frosted leaf resting on a smooth, reflective white surface. Soft, diffused lighting highlights the intricate veins, which appear to faintly glow with a subtle violet hue. The composition uses extensive negative space, adhering to a hyper-minimal luxury aesthetic. The overall mood is cold, crisp, and serene, designed for an elegant, light-mode interface." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAJ6DqJL4jJSKh_3TnSWIwnQCgYHoTCYPyqB2MC37HHhdFzjMkarEt03_42ZKfso5jIatcHukGS-aW8g6xodisfC6kNdP3pKdaCgFTvNnIjN6DWJSzf8nGh2fkEmCjLGhzDQ770lXWXPvShiiEmgte4SjKKKdg364nSXqjB5nXGhYR4R5dGIIxOlAGvEGL8501ZnWdIzeNiSagyHHYSMlMzXDlMZExF8Xd8dhRl3t6BZdJq9PBYLgM')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
+<span class="text-white font-body-base text-body-base drop-shadow-md">Frost Veins</span>
+<button class="p-2 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/40 transition-colors">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Recently Added (Masonry-like Grid) -->
+<section class="pb-12">
+<h2 class="font-headline-md-mobile text-headline-md-mobile md:font-headline-md md:text-headline-md text-on-background mb-stack-md">Recently Added</h2>
+<div class="columns-2 md:columns-3 lg:columns-4 gap-gutter space-y-gutter">
+<!-- Grid Item 1 -->
+<div class="break-inside-avoid relative group rounded-[20px] overflow-hidden shadow-[0_20px_50px_rgba(129,39,207,0.04)] cursor-pointer">
+<img class="w-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A vibrant, generative art piece displaying a swirling vortex of soft pastel colors, predominantly soft purple (#8127cf) and brilliant white. The texture looks like silky, floating fabric in a bright studio environment. The aesthetic is clean, modern, and ethereal, with high-key lighting ensuring the colors pop without overwhelming the light-mode UI context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXc8_GGekdOv2bukrUAGEAQR0VF0VxibPymnZez3CIqABa_YUHh5v3610b6hDo9fZOCvJpr0QlJJfnSDwzZSl2OpGEUlU8Ekhsa0UHK0xLi1JJBb2Fz4hATvZ5mKy_ZKgHeitIPuWbTKnJIyQR9WP7JY13LJfbl2iy8YFSBAsl1cYOZC_NY5PWxMJPQaC_sificpnxfxWPu96cZKXCmSvhHJZW_o0YVhQsjMdMyhr69erAirk72vE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+</div>
+<!-- Grid Item 2 (Taller) -->
+<div class="break-inside-avoid relative group rounded-[20px] overflow-hidden shadow-[0_20px_50px_rgba(129,39,207,0.04)] cursor-pointer">
+<div class="w-full h-64 md:h-80 bg-cover bg-center group-hover:scale-105 transition-transform duration-700" data-alt="A sleek, minimalist digital rendering of a futuristic geometric sphere hovering over an endless white desert. The sphere is made of translucent frosted glass, refracting a subtle, warm golden and deep purple light. The scene is incredibly expansive, using extreme negative space to convey a luxury, high-end design aesthetic. The lighting is bright and atmospheric." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCLe0OPxPX2_ui9IiKS-SI1oYpW8vI0L520wwOaKfbA3Y83WTZ_L7-otpCzOXnWiik4vKawRRIUicZkhl-yusIJh6-2JVv8RCAvl20y4kk1Wx1kUBUqduzatiYM0VC5WX6xmrB3lXpLemoaf8uuTG76e4glptlOwTwCSDGkdV0Lol-uqmgP7uipUSABmtCp2K0nkCjax2AqmiYpkM8JQtPiHUpvAM9TEa-GBzlLzcfGFG_octwwMEs')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+</div>
+<!-- Grid Item 3 -->
+<div class="break-inside-avoid relative group rounded-[20px] overflow-hidden shadow-[0_20px_50px_rgba(129,39,207,0.04)] cursor-pointer">
+<img class="w-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A top-down, minimalist view of gentle ocean waves washing over pristine white sand. The water is a striking, saturated turquoise that fades into clear, glowing edges. The image is bright, crisp, and clean, fitting seamlessly into a light-mode, premium wallpaper application. The composition feels expansive and calming." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr5jY-JMhlNOKM5Pnqw2oLkHadumIHHN-ysEo1IJylZvqp7qLQldJdY1cHnv9BzwpZH6i3wXR5jGHTaR5wJtHoEbhG__fl90fAyX8amSa6uejL8--b7dVQ1mh9Q4AwKsicYXx5s4GnGLmHg7jVNhVpoEWbHle0Y1AlhK0BEWgqPspiAbMiIH9dbOLRan9zp6S1eYSZjLoajWfo1i7BX_rfAdYUM6357M2x1pInqrTNKurPP3s65nY"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+</div>
+<!-- Grid Item 4 -->
+<div class="break-inside-avoid relative group rounded-[20px] overflow-hidden shadow-[0_20px_50px_rgba(129,39,207,0.04)] cursor-pointer">
+<img class="w-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="An abstract composition of stacked, matte white paper sheets with soft, luminous purple shadows cast between the layers. The design mimics a physical, tactile interface with exquisite depth and precision craft. The aesthetic is hyper-minimalist and expensive, perfect for a high-end design system's background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGMVk4RmF5sbAqN4H5HxkQWkaczWa0X6OxpHPSegh1BflRIHeDzygqpnLuvQnyxoL8O2Q1GqZm99kNWm7NIdCxsSGpd-g_Tc5IisLe2h6Z0PEC-fgvxGtfV5bCNDcDQsSjvbF25UXEyq5WqoH3DpBccYOavN6UjD-7REka9qKphItEcbU2SvposbDXy7oRgoYGSeBYY8rsbmiLiaDxMAbOdbOPrwsE1aJYNIHZHT-V9VAdyGGIzfs"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-white/40 dark:bg-black/20 backdrop-blur-[40px] fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md rounded-lg border border-white/20 dark:border-white/10 shadow-[0_32px_64px_rgba(129,39,207,0.08)] flex justify-around items-center py-2 px-gutter z-200">
+<!-- Explore (Active) -->
+<button class="bg-primary-container text-on-primary-container rounded-full p-3 flex items-center justify-center hover:bg-white/10 transition-colors active:scale-90 duration-300 ease-out group">
+<span class="material-symbols-outlined text-[24px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">explore</span>
+</button>
+<!-- Auto Awesome -->
+<button class="text-on-surface-variant/60 dark:text-surface-variant/60 p-3 flex items-center justify-center hover:bg-white/10 transition-colors active:scale-90 duration-300 ease-out rounded-full group">
+<span class="material-symbols-outlined text-[24px]">auto_awesome</span>
+</button>
+<!-- Favorite -->
+<button class="text-on-surface-variant/60 dark:text-surface-variant/60 p-3 flex items-center justify-center hover:bg-white/10 transition-colors active:scale-90 duration-300 ease-out rounded-full group">
+<span class="material-symbols-outlined text-[24px]">favorite</span>
+</button>
+<!-- Person -->
+<button class="text-on-surface-variant/60 dark:text-surface-variant/60 p-3 flex items-center justify-center hover:bg-white/10 transition-colors active:scale-90 duration-300 ease-out rounded-full group">
+<span class="material-symbols-outlined text-[24px]">person</span>
+</button>
+</nav>
+</body></html>

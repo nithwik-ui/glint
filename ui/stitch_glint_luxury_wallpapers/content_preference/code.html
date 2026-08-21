@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Glint - Content Preference</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed-dim": "#dbb8ff",
+                      "error-container": "#ffdad6",
+                      "primary": "#8127cf",
+                      "on-secondary-fixed": "#29074a",
+                      "tertiary-container": "#9b6b00",
+                      "on-tertiary-fixed-variant": "#604100",
+                      "background": "#fff7fe",
+                      "on-tertiary-fixed": "#281900",
+                      "primary-container": "#9c48ea",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#fbf0fe",
+                      "tertiary-fixed": "#ffdead",
+                      "primary-fixed": "#f0dbff",
+                      "surface-container-lowest": "#ffffff",
+                      "outline": "#7e7385",
+                      "on-tertiary": "#ffffff",
+                      "surface": "#fff7fe",
+                      "on-primary-fixed-variant": "#6900b3",
+                      "on-surface": "#1f1a23",
+                      "error": "#ba1a1a",
+                      "outline-variant": "#cfc2d6",
+                      "surface-bright": "#fff7fe",
+                      "tertiary-fixed-dim": "#fabc4e",
+                      "on-surface-variant": "#4d4354",
+                      "surface-container-high": "#f0e5f2",
+                      "on-error": "#ffffff",
+                      "surface-tint": "#842bd2",
+                      "secondary-fixed": "#efdbff",
+                      "on-error-container": "#93000a",
+                      "on-secondary-container": "#614283",
+                      "on-secondary": "#ffffff",
+                      "on-primary-fixed": "#2c0051",
+                      "inverse-primary": "#ddb7ff",
+                      "secondary": "#6f5092",
+                      "tertiary": "#7b5500",
+                      "on-primary-container": "#fffbff",
+                      "on-tertiary-container": "#fffbff",
+                      "surface-container-highest": "#eadfed",
+                      "surface-dim": "#e1d7e4",
+                      "surface-container": "#f5eaf8",
+                      "surface-variant": "#eadfed",
+                      "primary-fixed-dim": "#ddb7ff",
+                      "on-secondary-fixed-variant": "#573878",
+                      "inverse-on-surface": "#f8edfb",
+                      "secondary-container": "#d9b5ff",
+                      "inverse-surface": "#342e38",
+                      "on-background": "#1f1a23"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-md": "24px",
+                      "unit": "4px",
+                      "stack-sm": "8px",
+                      "margin-mobile": "20px",
+                      "container-max": "1200px",
+                      "margin-desktop": "48px",
+                      "gutter": "16px",
+                      "stack-lg": "48px"
+              },
+              "fontFamily": {
+                      "title-sm": ["Inter"],
+                      "headline-md-mobile": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-base": ["Inter"],
+                      "caption-xs": ["Inter"],
+                      "display-lg-mobile": ["Inter"],
+                      "headline-md": ["Inter"]
+              },
+              "fontSize": {
+                      "title-sm": ["22px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-md-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "display-lg": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-base": ["16px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                      "caption-xs": ["13px", {"lineHeight": "1.4", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "headline-md": ["28px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar to maintain clean look */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-base min-h-screen flex flex-col relative overflow-x-hidden antialiased">
+<!-- Atmospheric Background Glows -->
+<div class="absolute top-0 right-0 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-primary-fixed-dim/30 rounded-full blur-[100px] -z-10 pointer-events-none translate-x-1/3 -translate-y-1/3"></div>
+<div class="absolute bottom-1/4 left-0 w-[30vw] h-[30vw] max-w-[400px] max-h-[400px] bg-primary/5 rounded-full blur-[80px] -z-10 pointer-events-none -translate-x-1/2"></div>
+<!-- Main Content Container -->
+<main class="flex-1 w-full max-w-2xl mx-auto px-margin-mobile md:px-margin-desktop pt-12 pb-32 flex flex-col z-10 relative">
+<!-- Header Section -->
+<header class="mb-stack-lg">
+<div class="flex items-center justify-between mb-8">
+<!-- Back Action -->
+<button aria-label="Go back" class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container-lowest/50 border border-outline-variant/30 hover:bg-surface-container transition-colors shadow-sm backdrop-blur-md cursor-pointer">
+<span class="material-symbols-outlined text-on-surface-variant">arrow_back</span>
+</button>
+<!-- Progress Indicator -->
+<div class="px-5 py-2 rounded-full bg-surface-container-highest/30 backdrop-blur-md border border-white/40 shadow-sm flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary/40"></div>
+<div class="w-2 h-2 rounded-full bg-primary/40"></div>
+<div class="w-2 h-2 rounded-full bg-primary/40"></div>
+<div class="w-2 h-2 rounded-full bg-primary/40"></div>
+<div class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(129,39,207,0.6)]"></div>
+<span class="font-caption-xs text-caption-xs text-primary ml-2 uppercase tracking-widest">Step 5 of 5</span>
+</div>
+<div class="w-12"></div> <!-- Spacer for flex alignment -->
+</div>
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg tracking-tighter text-on-surface mb-4">
+                How Often Do You Change Wallpapers?
+            </h1>
+<p class="font-body-base text-body-base text-on-surface-variant/80 max-w-md">
+                We use this to pace your personalized gallery drops and keep your setup fresh without overwhelming you.
+            </p>
+</header>
+<!-- Options Form / List -->
+<div class="flex flex-col gap-4">
+<!-- Option: Daily (Pre-selected for demonstration) -->
+<button class="option-card group relative w-full text-left p-5 md:p-6 rounded-lg border-2 border-primary bg-primary/5 shadow-[0_16px_40px_rgba(129,39,207,0.08)] transition-all duration-300 flex items-center gap-5 overflow-hidden" data-value="daily">
+<!-- Inner glow effect for glassmorphism -->
+<div class="absolute inset-0 rounded-lg border border-white/20 pointer-events-none"></div>
+<div class="icon-container w-14 h-14 rounded-full bg-white flex items-center justify-center text-primary shadow-sm transition-colors relative z-10 shrink-0">
+<span class="material-symbols-outlined">today</span>
+</div>
+<div class="flex-1 relative z-10">
+<h3 class="font-title-sm text-title-sm text-on-surface">Daily</h3>
+<p class="font-caption-xs text-caption-xs text-on-surface-variant mt-1">A fresh aesthetic every morning.</p>
+</div>
+<div class="check-icon w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white transition-all duration-300 relative z-10 shrink-0">
+<span class="material-symbols-outlined" style="font-size: 16px; font-variation-settings: 'wght' 600;">check</span>
+</div>
+</button>
+<!-- Option: Every Few Days -->
+<button class="option-card group relative w-full text-left p-5 md:p-6 rounded-lg border-2 border-outline-variant/30 hover:border-primary/40 bg-surface-container-lowest/80 backdrop-blur-md transition-all duration-300 flex items-center gap-5" data-value="few-days">
+<div class="absolute inset-0 rounded-lg border border-white/50 pointer-events-none"></div>
+<div class="icon-container w-14 h-14 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:text-primary transition-colors relative z-10 shrink-0">
+<span class="material-symbols-outlined">view_agenda</span>
+</div>
+<div class="flex-1 relative z-10">
+<h3 class="font-title-sm text-title-sm text-on-surface">Every Few Days</h3>
+<p class="font-caption-xs text-caption-xs text-on-surface-variant mt-1">Regular updates, lingering beauty.</p>
+</div>
+<div class="check-icon w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white opacity-0 scale-50 transition-all duration-300 relative z-10 shrink-0">
+<span class="material-symbols-outlined" style="font-size: 16px; font-variation-settings: 'wght' 600;">check</span>
+</div>
+</button>
+<!-- Option: Weekly -->
+<button class="option-card group relative w-full text-left p-5 md:p-6 rounded-lg border-2 border-outline-variant/30 hover:border-primary/40 bg-surface-container-lowest/80 backdrop-blur-md transition-all duration-300 flex items-center gap-5" data-value="weekly">
+<div class="absolute inset-0 rounded-lg border border-white/50 pointer-events-none"></div>
+<div class="icon-container w-14 h-14 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:text-primary transition-colors relative z-10 shrink-0">
+<span class="material-symbols-outlined">date_range</span>
+</div>
+<div class="flex-1 relative z-10">
+<h3 class="font-title-sm text-title-sm text-on-surface">Weekly</h3>
+<p class="font-caption-xs text-caption-xs text-on-surface-variant mt-1">Setting the mood for the week ahead.</p>
+</div>
+<div class="check-icon w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white opacity-0 scale-50 transition-all duration-300 relative z-10 shrink-0">
+<span class="material-symbols-outlined" style="font-size: 16px; font-variation-settings: 'wght' 600;">check</span>
+</div>
+</button>
+<!-- Option: Monthly -->
+<button class="option-card group relative w-full text-left p-5 md:p-6 rounded-lg border-2 border-outline-variant/30 hover:border-primary/40 bg-surface-container-lowest/80 backdrop-blur-md transition-all duration-300 flex items-center gap-5" data-value="monthly">
+<div class="absolute inset-0 rounded-lg border border-white/50 pointer-events-none"></div>
+<div class="icon-container w-14 h-14 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:text-primary transition-colors relative z-10 shrink-0">
+<span class="material-symbols-outlined">calendar_month</span>
+</div>
+<div class="flex-1 relative z-10">
+<h3 class="font-title-sm text-title-sm text-on-surface">Monthly</h3>
+<p class="font-caption-xs text-caption-xs text-on-surface-variant mt-1">Deep dives into a single collection.</p>
+</div>
+<div class="check-icon w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white opacity-0 scale-50 transition-all duration-300 relative z-10 shrink-0">
+<span class="material-symbols-outlined" style="font-size: 16px; font-variation-settings: 'wght' 600;">check</span>
+</div>
+</button>
+<!-- Option: Rarely -->
+<button class="option-card group relative w-full text-left p-5 md:p-6 rounded-lg border-2 border-outline-variant/30 hover:border-primary/40 bg-surface-container-lowest/80 backdrop-blur-md transition-all duration-300 flex items-center gap-5" data-value="rarely">
+<div class="absolute inset-0 rounded-lg border border-white/50 pointer-events-none"></div>
+<div class="icon-container w-14 h-14 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:text-primary transition-colors relative z-10 shrink-0">
+<span class="material-symbols-outlined">hourglass_empty</span>
+</div>
+<div class="flex-1 relative z-10">
+<h3 class="font-title-sm text-title-sm text-on-surface">Rarely</h3>
+<p class="font-caption-xs text-caption-xs text-on-surface-variant mt-1">I find one I love and stick with it.</p>
+</div>
+<div class="check-icon w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white opacity-0 scale-50 transition-all duration-300 relative z-10 shrink-0">
+<span class="material-symbols-outlined" style="font-size: 16px; font-variation-settings: 'wght' 600;">check</span>
+</div>
+</button>
+</div>
+</main>
+<!-- Bottom Action Area -->
+<div class="fixed bottom-0 left-0 w-full p-margin-mobile md:p-margin-desktop bg-gradient-to-t from-background via-background/95 to-transparent backdrop-blur-[2px] z-50 pointer-events-none flex justify-center">
+<button class="pointer-events-auto w-full md:w-[400px] py-4 rounded-full bg-primary text-on-primary font-title-sm text-title-sm shadow-[0_24px_48px_rgba(129,39,207,0.3)] hover:shadow-[0_16px_32px_rgba(129,39,207,0.4)] hover:bg-primary/95 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 group">
+            Complete Setup
+            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform duration-300">arrow_forward</span>
+</button>
+</div>
+<!-- Interaction Logic -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.option-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    // Reset all cards
+                    cards.forEach(c => {
+                        // Remove active classes
+                        c.classList.remove('border-primary', 'bg-primary/5', 'shadow-[0_16px_40px_rgba(129,39,207,0.08)]');
+                        // Add inactive classes
+                        c.classList.add('border-outline-variant/30', 'bg-surface-container-lowest/80');
+                        
+                        const iconContainer = c.querySelector('.icon-container');
+                        iconContainer.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+                        iconContainer.classList.add('bg-surface-container', 'text-on-surface-variant');
+                        
+                        const checkIcon = c.querySelector('.check-icon');
+                        checkIcon.classList.add('opacity-0', 'scale-50');
+                    });
+
+                    // Set active state on clicked card
+                    card.classList.remove('border-outline-variant/30', 'bg-surface-container-lowest/80');
+                    card.classList.add('border-primary', 'bg-primary/5', 'shadow-[0_16px_40px_rgba(129,39,207,0.08)]');
+                    
+                    const activeIconContainer = card.querySelector('.icon-container');
+                    activeIconContainer.classList.remove('bg-surface-container', 'text-on-surface-variant');
+                    activeIconContainer.classList.add('bg-white', 'text-primary', 'shadow-sm');
+                    
+                    const activeCheckIcon = card.querySelector('.check-icon');
+                    activeCheckIcon.classList.remove('opacity-0', 'scale-50');
+                });
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>About Glint</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#4d4354",
+                        "on-primary-fixed-variant": "#6900b3",
+                        "tertiary": "#7b5500",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#dbb8ff",
+                        "tertiary-container": "#9b6b00",
+                        "primary-fixed": "#f0dbff",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#eadfed",
+                        "on-secondary-container": "#614283",
+                        "on-tertiary-container": "#fffbff",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#fffbff",
+                        "secondary": "#6f5092",
+                        "surface": "#fff7fe",
+                        "on-background": "#1f1a23",
+                        "inverse-surface": "#342e38",
+                        "primary-container": "#9c48ea",
+                        "surface-container-low": "#fbf0fe",
+                        "surface-container": "#f5eaf8",
+                        "on-secondary-fixed": "#29074a",
+                        "inverse-on-surface": "#f8edfb",
+                        "on-error-container": "#93000a",
+                        "outline": "#7e7385",
+                        "surface-container-high": "#f0e5f2",
+                        "primary-fixed-dim": "#ddb7ff",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed": "#efdbff",
+                        "on-primary-fixed": "#2c0051",
+                        "inverse-primary": "#ddb7ff",
+                        "tertiary-fixed": "#ffdead",
+                        "surface-bright": "#fff7fe",
+                        "on-secondary-fixed-variant": "#573878",
+                        "background": "#fff7fe",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#842bd2",
+                        "outline-variant": "#cfc2d6",
+                        "tertiary-fixed-dim": "#fabc4e",
+                        "on-tertiary-fixed-variant": "#604100",
+                        "surface-dim": "#e1d7e4",
+                        "on-tertiary-fixed": "#281900",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1f1a23",
+                        "primary": "#8127cf",
+                        "surface-variant": "#eadfed",
+                        "secondary-container": "#d9b5ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "gutter": "16px",
+                        "container-max": "1200px",
+                        "stack-md": "24px",
+                        "margin-desktop": "48px",
+                        "margin-mobile": "20px",
+                        "stack-lg": "48px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "caption-xs": ["Inter"],
+                        "body-base": ["Inter"],
+                        "headline-md-mobile": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "caption-xs": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-base": ["16px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-md-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "title-sm": ["22px", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "headline-md": ["28px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .bg-subtle-gradient {
+            background: radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.05) 0%, rgba(255, 255, 255, 0) 70%),
+                        radial-gradient(circle at 100% 100%, rgba(129, 39, 207, 0.03) 0%, rgba(255, 255, 255, 0) 50%);
+        }
+        .glow-shadow {
+            box-shadow: 0 32px 64px -16px rgba(168, 85, 247, 0.15), 0 0 0 1px rgba(168, 85, 247, 0.05) inset;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-base bg-subtle-gradient min-h-screen selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation (Shell suppressed based on prompt, but keeping a simple back action as this is an 'About' modal/page) -->
+<header class="fixed top-0 w-full z-200 px-margin-mobile py-stack-sm md:px-margin-desktop flex justify-between items-center bg-surface/80 backdrop-blur-xl border-b border-white/10">
+<button aria-label="Go back" class="p-2 -ml-2 rounded-full hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-primary font-[300]">arrow_back</span>
+</button>
+<span class="font-title-sm text-title-sm text-on-surface">About</span>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</header>
+<main class="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-2xl mx-auto flex flex-col items-center gap-stack-lg">
+<!-- Hero Section -->
+<section class="flex flex-col items-center text-center mt-stack-md">
+<div class="w-32 h-32 md:w-40 md:h-40 rounded-full glow-shadow mb-stack-md relative overflow-hidden bg-white flex items-center justify-center p-1">
+<img alt="Glint Logo" class="w-full h-full object-cover rounded-full" src="https://lh3.googleusercontent.com/aida/AEtjO1V2KtP1tqq4g8kjolfhrkH5GJx8des8psN-dNKCv_8G0t4A9v1KgID9Ye525N9bRJc8rb3vSeUyXBfbuT4_hcZ30oL7kvIm7XeIon1-ZeiSKNBDmgrAcjDnkg2HyC9-ommzq1bysIGiuV9fkUpLOhiXbgC0rCEDQWostlH1sz0wIVbNiecFDC-Rd_XowuRqgiJcAreZcb-KM_N9wyDfj2E2EsbMj41UUeTClNDni-swtLeZqaH7VSFnpg"/>
+</div>
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-surface mb-2 tracking-tight">
+                Glint
+            </h1>
+<p class="font-body-base text-body-base text-on-surface-variant">
+                Beautiful Wallpapers For Every Screen
+            </p>
+</section>
+<!-- Mission Statement -->
+<section class="w-full glass-panel rounded-[2rem] p-stack-md text-center shadow-[0_20px_50px_rgba(129,39,207,0.03)] relative overflow-hidden">
+<!-- Subtle inner glow -->
+<div class="absolute inset-0 bg-gradient-to-b from-white/40 to-transparent pointer-events-none rounded-[2rem]"></div>
+<h2 class="font-title-sm text-title-sm text-primary mb-stack-sm relative z-10">Our Mission</h2>
+<p class="font-body-base text-body-base text-on-surface-variant relative z-10 leading-relaxed">
+                 Glint is dedicated to curating the world's most beautiful pixels. We believe your most-used device deserves an aesthetic that inspires you every time you unlock it.
+             </p>
+</section>
+<!-- Information List -->
+<section class="w-full bg-surface-container-lowest rounded-[2rem] glow-shadow overflow-hidden">
+<div class="flex flex-col divide-y divide-outline-variant/30">
+<!-- Version -->
+<div class="flex justify-between items-center p-stack-md group">
+<span class="font-body-base text-body-base text-on-surface">Version</span>
+<span class="font-caption-xs text-caption-xs text-primary bg-primary-container/30 px-3 py-1 rounded-full">2.1.0</span>
+</div>
+<!-- Links -->
+<a class="flex justify-between items-center p-stack-md hover:bg-surface-variant/30 transition-colors group" href="#">
+<span class="font-body-base text-body-base text-on-surface">Terms of Service</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors transition-transform group-hover:translate-x-1">chevron_right</span>
+</a>
+<a class="flex justify-between items-center p-stack-md hover:bg-surface-variant/30 transition-colors group" href="#">
+<span class="font-body-base text-body-base text-on-surface">Privacy Policy</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors transition-transform group-hover:translate-x-1">chevron_right</span>
+</a>
+<a class="flex justify-between items-center p-stack-md hover:bg-surface-variant/30 transition-colors group" href="#">
+<span class="font-body-base text-body-base text-on-surface">Open Source Licenses</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors transition-transform group-hover:translate-x-1">chevron_right</span>
+</a>
+</div>
+</section>
+</main>
+</body></html>
