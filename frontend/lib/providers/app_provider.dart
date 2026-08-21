@@ -15,8 +15,20 @@ import 'package:open_app_file/open_app_file.dart';
 import '../models/wallpaper.dart';
 import '../services/api_service.dart';
 import '../services/storage_service.dart';
+import '../services/custom_exceptions.dart';
 
 enum AppState { idle, loading, error }
+
+enum AppErrorType {
+  none,
+  noInternet,
+  apiError,
+  serverError,
+  cacheError,
+  recommendationError,
+  storageError,
+  unknown
+}
 
 class AppProvider extends ChangeNotifier {
   final ApiService _apiService = ApiService();
@@ -46,6 +58,9 @@ class AppProvider extends ChangeNotifier {
   String _errorMessage = '';
   String get errorMessage => _errorMessage;
 
+  AppErrorType _errorType = AppErrorType.none;
+  AppErrorType get errorType => _errorType;
+
   // Search-specific state
   List<Wallpaper> _searchResults = [];
   List<Wallpaper> get searchResults => _searchResults;
@@ -63,6 +78,10 @@ class AppProvider extends ChangeNotifier {
 
   List<Map<String, dynamic>> _recommendedCollections = [];
   List<Map<String, dynamic>> get recommendedCollections => _recommendedCollections;
+
+  int _curatedPage = 1;
+  bool _isLoadingMore = false;
+  bool get isLoadingMore => _isLoadingMore;
 
   // App Update state
   String _latestVersion = '';
@@ -138,6 +157,9 @@ class AppProvider extends ChangeNotifier {
   // --- Fetch Core Feeds ---
   Future<void> loadHomeData() async {
     _setState(AppState.loading);
+    _errorType = AppErrorType.none;
+    _errorMessage = '';
+    _curatedPage = 1;
     try {
       // 1. Fetch curated wallpapers
       final list = await _apiService.fetchCurated(page: 1, perPage: 30);
@@ -155,8 +177,49 @@ class AppProvider extends ChangeNotifier {
       _setState(AppState.idle);
     } catch (e) {
       _errorMessage = e.toString();
+      _errorType = _determineErrorType(e);
       _setState(AppState.error);
     }
+  }
+
+  Future<void> loadMoreCurated() async {
+    if (_isLoadingMore) return;
+    _isLoadingMore = true;
+    notifyListeners();
+    try {
+      final nextPage = _curatedPage + 1;
+      final list = await _apiService.fetchCurated(page: nextPage, perPage: 20);
+      if (list.isNotEmpty) {
+        // Prevent duplicate wallpaper IDs
+        final existingIds = _curatedWallpapers.map((w) => w.id).toSet();
+        final newItems = list.where((w) => !existingIds.contains(w.id)).toList();
+        _curatedWallpapers.addAll(newItems);
+        _curatedPage = nextPage;
+        await buildRecommendations();
+      }
+    } catch (e) {
+      debugPrint('Error loading more wallpapers: $e');
+    } finally {
+      _isLoadingMore = false;
+      notifyListeners();
+    }
+  }
+
+  AppErrorType _determineErrorType(dynamic e) {
+    if (e is NoInternetException || e.toString().contains('NoInternetException')) {
+      return AppErrorType.noInternet;
+    } else if (e is ApiException || e.toString().contains('ApiException')) {
+      return AppErrorType.apiError;
+    } else if (e is ServerException || e.toString().contains('ServerException')) {
+      return AppErrorType.serverError;
+    } else if (e is CacheException || e.toString().contains('CacheException')) {
+      return AppErrorType.cacheError;
+    } else if (e is StorageException || e.toString().contains('StorageException')) {
+      return AppErrorType.storageError;
+    } else if (e is RecommendationException || e.toString().contains('RecommendationException')) {
+      return AppErrorType.recommendationError;
+    }
+    return AppErrorType.unknown;
   }
 
   // --- Telemetry Events V2 ---
@@ -177,25 +240,54 @@ class AppProvider extends ChangeNotifier {
     await buildRecommendations();
   }
 
-  // --- Recommendation Logic V2 (Client Side Multi-Feed Generator) ---
+  // --- Recommendation Logic V2 (Client Side Multi-Feed Generator via Isolate) ---
   Future<void> buildRecommendations() async {
     if (_curatedWallpapers.isEmpty) return;
 
     final interests = _storageService.getTopInterests();
+
+    final params = RecommendationParams(
+      curatedWallpapers: List.from(_curatedWallpapers),
+      interests: Map<String, List<String>>.from(interests),
+      recentlyViewed: List.from(_recentlyViewed),
+      downloads: List.from(_downloads),
+    );
+
+    final result = await compute(AppProvider._computeRecommendationsIsolate, params);
+
+    _recommendedWallpapers = result.recommendedWallpapers;
+    _basedOnRecentFeeds = result.basedOnRecentFeeds;
+    _similarToDownloadsFeeds = result.similarToDownloadsFeeds;
+    _recommendedCollections = result.recommendedCollections;
+
+    notifyListeners();
+  }
+
+  static RecommendationResult _computeRecommendationsIsolate(RecommendationParams params) {
+    final List<Wallpaper> curatedWallpapers = params.curatedWallpapers;
+    final Map<String, List<String>> interests = params.interests;
+    final List<Wallpaper> recentlyViewed = params.recentlyViewed;
+    final List<Wallpaper> downloads = params.downloads;
+
     final topCategories = interests['categories'] ?? [];
     final topColors = interests['colors'] ?? [];
     final topTags = interests['tags'] ?? [];
 
-    // 1. Generate general recommended wallpapers (For You)
+    List<Wallpaper> recommended;
+    List<Wallpaper> basedOnRecent;
+    List<Wallpaper> similarToDownloads;
+    List<Map<String, dynamic>> collections;
+
+    // 1. Recommended
     if (topCategories.isEmpty && topColors.isEmpty && topTags.isEmpty) {
-      _recommendedWallpapers = List.from(_curatedWallpapers)..shuffle();
+      recommended = List.from(curatedWallpapers)..shuffle();
     } else {
       final List<MapEntry<Wallpaper, double>> scoredWallpapers = [];
-      for (final wp in _curatedWallpapers) {
+      for (final wp in curatedWallpapers) {
         double score = 0.0;
         // Category matching
         for (final tag in wp.tags) {
-          final mappedCat = _mapTagToCategory(tag);
+          final mappedCat = _mapTagToCategoryStatic(tag);
           final catIndex = topCategories.indexOf(mappedCat);
           if (catIndex == 0) score += 15.0;
           if (catIndex == 1) score += 10.0;
@@ -214,42 +306,42 @@ class AppProvider extends ChangeNotifier {
         scoredWallpapers.add(MapEntry(wp, score));
       }
       scoredWallpapers.sort((a, b) => b.value.compareTo(a.value));
-      _recommendedWallpapers = scoredWallpapers.map((entry) => entry.key).toList();
+      recommended = scoredWallpapers.map((entry) => entry.key).toList();
     }
 
-    // 2. Generate "Based on Recent Activity" feed (using recentlyViewed tags)
-    if (_recentlyViewed.isEmpty) {
-      _basedOnRecentFeeds = List.from(_curatedWallpapers)..shuffle();
+    // 2. Recent activity
+    if (recentlyViewed.isEmpty) {
+      basedOnRecent = List.from(curatedWallpapers)..shuffle();
     } else {
-      final recentTags = _recentlyViewed.expand((wp) => wp.tags).map((t) => t.toLowerCase().trim()).toSet();
-      _basedOnRecentFeeds = _curatedWallpapers.where((wp) {
-        if (_recentlyViewed.any((rv) => rv.id == wp.id)) return false;
+      final recentTags = recentlyViewed.expand((wp) => wp.tags).map((t) => t.toLowerCase().trim()).toSet();
+      basedOnRecent = curatedWallpapers.where((wp) {
+        if (recentlyViewed.any((rv) => rv.id == wp.id)) return false;
         return wp.tags.any((tag) => recentTags.contains(tag.toLowerCase().trim()));
       }).toList();
-      if (_basedOnRecentFeeds.isEmpty) {
-        _basedOnRecentFeeds = List.from(_curatedWallpapers)..shuffle();
+      if (basedOnRecent.isEmpty) {
+        basedOnRecent = List.from(curatedWallpapers)..shuffle();
       }
     }
 
-    // 3. Generate "Similar to Downloads" feed (using downloads tags)
-    if (_downloads.isEmpty) {
-      _similarToDownloadsFeeds = [];
+    // 3. Similar to downloads
+    if (downloads.isEmpty) {
+      similarToDownloads = [];
     } else {
-      final downloadTags = _downloads.expand((wp) => wp.tags).map((t) => t.toLowerCase().trim()).toSet();
-      _similarToDownloadsFeeds = _curatedWallpapers.where((wp) {
-        if (_downloads.any((d) => d.id == wp.id)) return false;
+      final downloadTags = downloads.expand((wp) => wp.tags).map((t) => t.toLowerCase().trim()).toSet();
+      similarToDownloads = curatedWallpapers.where((wp) {
+        if (downloads.any((d) => d.id == wp.id)) return false;
         return wp.tags.any((tag) => downloadTags.contains(tag.toLowerCase().trim()));
       }).toList();
     }
 
-    // 4. Generate Recommended Collections dynamically
+    // 4. Collections
     final List<String> categoriesToCreate = topCategories.isNotEmpty 
         ? List<String>.from(topCategories) 
         : ['Minimal', 'Nature', 'Space'];
         
-    _recommendedCollections = categoriesToCreate.map((cat) {
-      final collectionWallpapers = _curatedWallpapers.where((wp) {
-        return wp.tags.any((tag) => _mapTagToCategory(tag) == cat);
+    collections = categoriesToCreate.map((cat) {
+      final collectionWallpapers = curatedWallpapers.where((wp) {
+        return wp.tags.any((tag) => _mapTagToCategoryStatic(tag) == cat);
       }).take(6).toList();
       
       return {
@@ -259,7 +351,38 @@ class AppProvider extends ChangeNotifier {
       };
     }).toList();
 
-    notifyListeners();
+    return RecommendationResult(
+      recommendedWallpapers: recommended,
+      basedOnRecentFeeds: basedOnRecent,
+      similarToDownloadsFeeds: similarToDownloads,
+      recommendedCollections: collections,
+    );
+  }
+
+  static String _mapTagToCategoryStatic(String tag) {
+    final clean = tag.toLowerCase();
+    if (clean.contains('nature') || clean.contains('landscape') || clean.contains('mountain') || clean.contains('lake')) {
+      return 'Nature';
+    }
+    if (clean.contains('amoled') || clean.contains('black') || clean.contains('dark')) {
+      return 'AMOLED';
+    }
+    if (clean.contains('space') || clean.contains('nasa') || clean.contains('nebula') || clean.contains('galaxy') || clean.contains('stars')) {
+      return 'Space';
+    }
+    if (clean.contains('minimal') || clean.contains('simple') || clean.contains('clean')) {
+      return 'Minimal';
+    }
+    if (clean.contains('abstract') || clean.contains('fluid') || clean.contains('liquid') || clean.contains('glass')) {
+      return 'Abstract';
+    }
+    if (clean.contains('anime') || clean.contains('manga') || clean.contains('cyberpunk') || clean.contains('japanese')) {
+      return 'Anime';
+    }
+    if (clean.contains('sport') || clean.contains('football') || clean.contains('cricket') || clean.contains('racing') || clean.contains('basketball')) {
+      return 'Sports';
+    }
+    return 'Aesthetic';
   }
 
   // --- Similar Wallpapers Correlation V2 ---
@@ -300,6 +423,8 @@ class AppProvider extends ChangeNotifier {
   Future<void> search(String query, {String color = '', String category = ''}) async {
     _isSearching = true;
     _setState(AppState.loading);
+    _errorType = AppErrorType.none;
+    _errorMessage = '';
     try {
       if (query.isNotEmpty) {
         await _storageService.addSearchQuery(query);
@@ -311,13 +436,88 @@ class AppProvider extends ChangeNotifier {
         page: 1,
         perPage: 30,
       );
+      
+      if (_searchResults.isEmpty && query.isNotEmpty) {
+        _searchResults = _performLocalSearch(query, color: color, category: category);
+      }
       _setState(AppState.idle);
     } catch (e) {
       _errorMessage = e.toString();
+      _errorType = _determineErrorType(e);
+      
+      if (query.isNotEmpty) {
+        _searchResults = _performLocalSearch(query, color: color, category: category);
+        if (_searchResults.isNotEmpty) {
+          _setState(AppState.idle);
+          return;
+        }
+      }
       _setState(AppState.error);
     } finally {
       _isSearching = false;
     }
+  }
+
+  List<Wallpaper> _performLocalSearch(String query, {String color = '', String category = ''}) {
+    final cleanQuery = query.toLowerCase().trim();
+    
+    final synonyms = {
+      'space': ['galaxy', 'universe', 'stars', 'planets', 'astronomy', 'cosmos', 'nebula', 'milky way'],
+      'nature': ['landscape', 'forest', 'mountain', 'lake', 'river', 'sea', 'ocean', 'beach', 'sunset'],
+      'minimal': ['minimalist', 'clean', 'simple'],
+      'abstract': ['gradient', 'fluid', 'liquid', 'art'],
+      'anime': ['manga', 'japanese', 'illustration'],
+      'sports': ['gaming', 'football', 'soccer', 'racing', 'cars'],
+      'amoled': ['dark', 'black', 'oled', 'neon']
+    };
+    
+    final searchTerms = [cleanQuery];
+    for (final entry in synonyms.entries) {
+      if (cleanQuery.contains(entry.key)) {
+        searchTerms.addAll(entry.value);
+      }
+    }
+
+    final candidates = <String, Wallpaper>{};
+    for (final wp in _curatedWallpapers) {
+      candidates[wp.id] = wp;
+    }
+    for (final wp in _favorites) {
+      candidates[wp.id] = wp;
+    }
+    for (final wp in _downloads) {
+      candidates[wp.id] = wp;
+    }
+
+    final results = <Wallpaper>[];
+    for (final wp in candidates.values) {
+      // 1. Color filter
+      if (color.isNotEmpty) {
+        final hasColor = wp.colors.any((c) => c.toLowerCase().replaceAll('#', '') == color.toLowerCase().replaceAll('#', '')) ||
+                         wp.color.toLowerCase().replaceAll('#', '') == color.toLowerCase().replaceAll('#', '');
+        if (!hasColor) continue;
+      }
+
+      // 2. Category filter
+      if (category.isNotEmpty && category != 'All') {
+        final cleanCat = category.toLowerCase();
+        final matchesCat = wp.tags.any((t) => t.toLowerCase().contains(cleanCat)) ||
+                           _mapTagToCategory(wp.tags.firstOrNull ?? '').toLowerCase() == cleanCat;
+        if (!matchesCat) continue;
+      }
+
+      // 3. Search query match
+      if (cleanQuery.isNotEmpty) {
+        final matches = wp.title.toLowerCase().contains(cleanQuery) ||
+                        wp.author.toLowerCase().contains(cleanQuery) ||
+                        wp.tags.any((t) => searchTerms.any((term) => t.toLowerCase().contains(term)));
+        if (!matches) continue;
+      }
+
+      results.add(wp);
+    }
+
+    return results;
   }
 
   // --- Onboarding Selection helper ---
@@ -440,7 +640,7 @@ class AppProvider extends ChangeNotifier {
       final currentVersion = packageInfo.version; // e.g. "1.0.1"
 
       // Call GitHub Releases API
-      final uri = Uri.parse('https://api.github.com/repos/Nithwik/Glint/releases/latest');
+      final uri = Uri.parse('https://api.github.com/repos/nithwik-ui/glint/releases/latest');
       final response = await http.get(uri);
 
       if (response.statusCode == 200) {
@@ -474,16 +674,34 @@ class AppProvider extends ChangeNotifier {
   }
 
   bool _isNewerVersion(String current, String latest) {
-    final c = current.replaceAll('v', '').trim();
-    final l = latest.replaceAll('v', '').trim();
+    String c = current.replaceAll('v', '').trim();
+    String l = latest.replaceAll('v', '').trim();
+    
+    // Strip build numbers like +2
+    if (c.contains('+')) {
+      c = c.split('+')[0];
+    }
+    if (l.contains('+')) {
+      l = l.split('+')[0];
+    }
+    
+    // Strip pre-release suffixes like -beta
+    if (c.contains('-')) {
+      c = c.split('-')[0];
+    }
+    if (l.contains('-')) {
+      l = l.split('-')[0];
+    }
+    
     if (c == l) return false;
     
     final cParts = c.split('.').map((e) => int.tryParse(e) ?? 0).toList();
     final lParts = l.split('.').map((e) => int.tryParse(e) ?? 0).toList();
     
-    for (int i = 0; i < lParts.length; i++) {
-      final lVal = lParts[i];
+    final maxLength = cParts.length > lParts.length ? cParts.length : lParts.length;
+    for (int i = 0; i < maxLength; i++) {
       final cVal = i < cParts.length ? cParts[i] : 0;
+      final lVal = i < lParts.length ? lParts[i] : 0;
       if (lVal > cVal) return true;
       if (lVal < cVal) return false;
     }
@@ -502,48 +720,78 @@ class AppProvider extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final contentLength = response.contentLength ?? 0;
-        final List<int> bytes = [];
         
-        final directory = await getTemporaryDirectory();
+        final dirs = await getExternalCacheDirectories();
+        final directory = (dirs != null && dirs.isNotEmpty) ? dirs.first : await getTemporaryDirectory();
         final filePath = '${directory.path}/glint_update.apk';
         final file = File(filePath);
 
+        if (await file.exists()) {
+          await file.delete();
+        }
+
+        final sink = file.openWrite();
         int downloadedBytes = 0;
         
-        response.stream.listen(
-          (chunk) {
-            bytes.addAll(chunk);
-            downloadedBytes += chunk.length;
-            if (contentLength > 0) {
-              _updateDownloadProgress = downloadedBytes / contentLength;
-              notifyListeners();
-            }
-          },
-          onDone: () async {
-            await file.writeAsBytes(bytes);
-            _isDownloadingUpdate = false;
-            _updateDownloadProgress = 1.0;
+        await for (final chunk in response.stream) {
+          sink.add(chunk);
+          downloadedBytes += chunk.length;
+          if (contentLength > 0) {
+            _updateDownloadProgress = downloadedBytes / contentLength;
             notifyListeners();
+          }
+        }
 
-            // Launch package installer
-            final result = await OpenAppFile.open(filePath);
-            debugPrint('OpenAppFile install apk result: ${result.message}');
-          },
-          onError: (e) {
-            _isDownloadingUpdate = false;
-            notifyListeners();
-            debugPrint('Error stream download: $e');
-          },
-          cancelOnError: true,
-        );
+        await sink.flush();
+        await sink.close();
+
+        _isDownloadingUpdate = false;
+        _updateDownloadProgress = 1.0;
+        notifyListeners();
+
+        // Verify APK Integrity (ZIP header check: PK\x03\x04 -> [80, 75, 3, 4])
+        final isIntegrityValid = await _verifyApkIntegrity(filePath);
+        if (!isIntegrityValid) {
+          throw Exception('APK file integrity check failed. The downloaded file might be corrupted.');
+        }
+
+        // Launch package installer
+        final result = await OpenAppFile.open(filePath);
+        debugPrint('OpenAppFile install apk result: ${result.message}');
       } else {
-        throw Exception('Server returned ${response.statusCode}');
+        throw Exception('Server returned status code ${response.statusCode}');
       }
     } catch (e) {
       _isDownloadingUpdate = false;
       notifyListeners();
       debugPrint('Error downloading update: $e');
+      _errorMessage = 'Update failed: ${e.toString()}';
+      _errorType = AppErrorType.unknown;
     }
+  }
+
+  Future<bool> _verifyApkIntegrity(String filePath) async {
+    try {
+      final file = File(filePath);
+      if (!await file.exists()) return false;
+      final length = await file.length();
+      if (length < 100) return false;
+
+      final raf = await file.open(mode: FileMode.read);
+      final headerBytes = await raf.read(4);
+      await raf.close();
+
+      if (headerBytes.length == 4 &&
+          headerBytes[0] == 80 &&
+          headerBytes[1] == 75 &&
+          headerBytes[2] == 3 &&
+          headerBytes[3] == 4) {
+        return true;
+      }
+    } catch (e) {
+      debugPrint('Integrity verification failed with error: $e');
+    }
+    return false;
   }
 
   Future<void> launchUpdateUrl() async {
@@ -563,6 +811,15 @@ class AppProvider extends ChangeNotifier {
     _curatedWallpapers = [];
     _recommendedWallpapers = [];
     _wallpaperOfTheDay = null;
+    notifyListeners();
+  }
+
+  Future<void> resetRecommendations() async {
+    await _storageService.clearSearchHistory();
+    await _storageService.clearRecentlyViewed();
+    await _storageService.clearRecommendationWeights();
+    _recentlyViewed = [];
+    await buildRecommendations();
     notifyListeners();
   }
 
@@ -605,4 +862,32 @@ class AppProvider extends ChangeNotifier {
     }
     return 'Aesthetic';
   }
+}
+
+class RecommendationParams {
+  final List<Wallpaper> curatedWallpapers;
+  final Map<String, List<String>> interests;
+  final List<Wallpaper> recentlyViewed;
+  final List<Wallpaper> downloads;
+
+  RecommendationParams({
+    required this.curatedWallpapers,
+    required this.interests,
+    required this.recentlyViewed,
+    required this.downloads,
+  });
+}
+
+class RecommendationResult {
+  final List<Wallpaper> recommendedWallpapers;
+  final List<Wallpaper> basedOnRecentFeeds;
+  final List<Wallpaper> similarToDownloadsFeeds;
+  final List<Map<String, dynamic>> recommendedCollections;
+
+  RecommendationResult({
+    required this.recommendedWallpapers,
+    required this.basedOnRecentFeeds,
+    required this.similarToDownloadsFeeds,
+    required this.recommendedCollections,
+  });
 }

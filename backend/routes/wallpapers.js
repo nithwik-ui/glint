@@ -33,6 +33,92 @@ function cleanHexColor(c) {
   return c.startsWith('#') ? c : `#${c}`;
 }
 
+// Fetch with a timeout signal
+async function fetchWithTimeout(url, options = {}, timeoutMs = 1500) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(url, { ...options, signal: controller.signal });
+    clearTimeout(id);
+    return response;
+  } catch (error) {
+    clearTimeout(id);
+    throw error;
+  }
+}
+
+// Synonym dictionary mapping
+const SYNONYMS = {
+  'space': ['galaxy', 'universe', 'stars', 'planets', 'astronomy', 'cosmos', 'nebula', 'milky way', 'apod', 'astronaut', 'sky', 'night sky'],
+  'galaxy': ['space', 'universe', 'cosmos', 'nebula'],
+  'nebula': ['space', 'galaxy', 'universe', 'cosmos'],
+  'universe': ['space', 'galaxy', 'cosmos', 'nebula'],
+  'nature': ['landscape', 'forest', 'mountain', 'lake', 'river', 'sea', 'ocean', 'beach', 'trees', 'sunset', 'sunrise'],
+  'minimal': ['minimalist', 'clean', 'simple', 'flat', 'vector'],
+  'abstract': ['gradient', 'fluid', 'liquid', 'art', 'vector', 'digital'],
+  'anime': ['manga', 'japanese', 'illustration', 'art'],
+  'sports': ['gaming', 'football', 'basketball', 'soccer', 'racing', 'cars', 'pulse'],
+  'amoled': ['dark', 'black', 'oled', 'neon']
+};
+
+const KNOWN_WORDS = ['space', 'nature', 'minimal', 'abstract', 'anime', 'sports', 'amoled', 'galaxy', 'universe', 'stars', 'planets', 'astronomy', 'cosmos', 'nebula', 'milky way'];
+
+// Levenshtein distance for typo tolerance
+function levenshteinDistance(s1, s2) {
+  const len1 = s1.length, len2 = s2.length;
+  const matrix = Array.from({ length: len1 + 1 }, () => Array(len2 + 1).fill(0));
+  for (let i = 0; i <= len1; i++) matrix[i][0] = i;
+  for (let j = 0; j <= len2; j++) matrix[0][j] = j;
+  for (let i = 1; i <= len1; i++) {
+    for (let j = 1; j <= len2; j++) {
+      const cost = s1[i - 1] === s2[j - 1] ? 0 : 1;
+      matrix[i][j] = Math.min(
+        matrix[i - 1][j] + 1, // deletion
+        matrix[i][j - 1] + 1, // insertion
+        matrix[i - 1][j - 1] + cost // substitution
+      );
+    }
+  }
+  return matrix[len1][len2];
+}
+
+// Typo correction logic
+function correctTypos(query) {
+  if (!query) return '';
+  const words = query.toLowerCase().split(/\s+/);
+  const corrected = words.map(word => {
+    if (word.length < 3) return word;
+    if (KNOWN_WORDS.includes(word)) return word;
+    let bestMatch = word;
+    let minDistance = 999;
+    for (const known of KNOWN_WORDS) {
+      const maxDist = word.length <= 4 ? 1 : 2;
+      const d = levenshteinDistance(word, known);
+      if (d <= maxDist && d < minDistance) {
+        minDistance = d;
+        bestMatch = known;
+      }
+    }
+    return bestMatch;
+  });
+  return corrected.join(' ');
+}
+
+// Synonym expansion query builder
+function getExpandedQueries(query) {
+  const corrected = correctTypos(query);
+  const words = corrected.split(/\s+/);
+  const queries = [corrected];
+  
+  words.forEach(word => {
+    if (SYNONYMS[word]) {
+      queries.push(...SYNONYMS[word]);
+    }
+  });
+  
+  return [...new Set(queries)].slice(0, 5);
+}
+
 // Static Handpicked Premium Fallback Wallpapers (Royalty-free high-res)
 const STATIC_FALLBACK_WALLPAPERS = [
   {
@@ -184,17 +270,19 @@ router.get('/curated', async (req, res) => {
     const perPage = parseInt(req.query.per_page) || 20;
 
     let combined = [];
+    const promises = [];
 
     // --- Provider 1: Pexels ---
     if (process.env.PEXELS_API_KEY) {
-      try {
-        const response = await fetch(`https://api.pexels.com/v1/curated?page=${page}&per_page=${perPage}`, {
+      promises.push(
+        fetchWithTimeout(`https://api.pexels.com/v1/curated?page=${page}&per_page=${perPage}`, {
           headers: { 'Authorization': process.env.PEXELS_API_KEY }
-        });
-        if (response.ok) {
+        }, 1500)
+        .then(async response => {
+          if (!response.ok) throw new Error(`Pexels API error status: ${response.status}`);
           const data = await response.json();
           const photos = data.photos || [];
-          combined.push(...photos.map(photo => ({
+          return photos.map(photo => ({
             id: `pexels_${photo.id}`,
             provider: 'pexels',
             title: photo.alt || 'Glint Exclusive',
@@ -207,50 +295,58 @@ router.get('/curated', async (req, res) => {
             color: photo.avg_color || '#8127cf',
             colors: [photo.avg_color || '#8127cf'],
             tags: photo.alt ? photo.alt.split(' ').filter(w => w.length > 3) : ['nature', 'wallpaper']
-          })));
-        }
-      } catch (e) {
-        console.error("Error fetching from Pexels:", e.message);
-      }
+          }));
+        })
+        .catch(e => {
+          console.error("Error fetching from Pexels (failover active):", e.message);
+          return [];
+        })
+      );
     }
 
     // --- Provider 2: Wallhaven ---
-    try {
-      const wallhavenKey = process.env.WALLHAVEN_API_KEY;
-      const url = wallhavenKey 
-          ? `https://wallhaven.cc/api/v1/search?apikey=${wallhavenKey}&purity=100&sorting=toplist&page=${page}`
-          : `https://wallhaven.cc/api/v1/search?purity=100&sorting=toplist&page=${page}`;
-      const response = await fetch(url);
-      if (response.ok) {
-        const data = await response.json();
-        const photos = data.data || [];
-        combined.push(...photos.map(photo => ({
-          id: `wallhaven_${photo.id}`,
-          provider: 'wallhaven',
-          title: photo.id,
-          author: 'Wallhaven Artist',
-          thumbnailUrl: photo.thumbs.small || photo.thumbs.large,
-          previewUrl: photo.path,
-          fullUrl: photo.path,
-          width: photo.dimension_x,
-          height: photo.dimension_y,
-          color: photo.colors && photo.colors.length > 0 ? cleanHexColor(photo.colors[0]) : '#8127cf',
-          colors: photo.colors ? photo.colors.map(cleanHexColor) : [],
-          tags: photo.category ? [photo.category] : ['aesthetic']
-        })));
-      }
-    } catch (e) {
-      console.error("Error fetching from Wallhaven:", e.message);
-    }
+    promises.push(
+      (() => {
+        const wallhavenKey = process.env.WALLHAVEN_API_KEY;
+        const url = wallhavenKey 
+            ? `https://wallhaven.cc/api/v1/search?apikey=${wallhavenKey}&purity=100&sorting=toplist&page=${page}`
+            : `https://wallhaven.cc/api/v1/search?purity=100&sorting=toplist&page=${page}`;
+        return fetchWithTimeout(url, {}, 1500)
+          .then(async response => {
+            if (!response.ok) throw new Error(`Wallhaven API error status: ${response.status}`);
+            const data = await response.json();
+            const photos = data.data || [];
+            return photos.map(photo => ({
+              id: `wallhaven_${photo.id}`,
+              provider: 'wallhaven',
+              title: photo.id,
+              author: 'Wallhaven Artist',
+              thumbnailUrl: photo.thumbs.small || photo.thumbs.large,
+              previewUrl: photo.path,
+              fullUrl: photo.path,
+              width: photo.dimension_x,
+              height: photo.dimension_y,
+              color: photo.colors && photo.colors.length > 0 ? cleanHexColor(photo.colors[0]) : '#8127cf',
+              colors: photo.colors ? photo.colors.map(cleanHexColor) : [],
+              tags: photo.category ? [photo.category] : ['aesthetic']
+            }));
+          })
+          .catch(e => {
+            console.error("Error fetching from Wallhaven (failover active):", e.message);
+            return [];
+          });
+      })()
+    );
 
     // --- Provider 3: Pixabay ---
     if (process.env.PIXABAY_API_KEY) {
-      try {
-        const response = await fetch(`https://pixabay.com/api/?key=${process.env.PIXABAY_API_KEY}&q=wallpaper+background&page=${page}&per_page=${perPage}&image_type=photo&orientation=vertical&safesearch=true`);
-        if (response.ok) {
+      promises.push(
+        fetchWithTimeout(`https://pixabay.com/api/?key=${process.env.PIXABAY_API_KEY}&q=wallpaper+background&page=${page}&per_page=${perPage}&image_type=photo&orientation=vertical&safesearch=true`, {}, 1500)
+        .then(async response => {
+          if (!response.ok) throw new Error(`Pixabay API error status: ${response.status}`);
           const data = await response.json();
           const hits = data.hits || [];
-          combined.push(...hits.map(photo => ({
+          return hits.map(photo => ({
             id: `pixabay_${photo.id}`,
             provider: 'pixabay',
             title: photo.tags ? photo.tags.split(',')[0] : 'Glint Creative',
@@ -263,17 +359,23 @@ router.get('/curated', async (req, res) => {
             color: '#8127cf',
             colors: [],
             tags: photo.tags ? photo.tags.split(',').map(t => t.trim()) : []
-          })));
-        }
-      } catch (e) {
-        console.error("Error fetching from Pixabay:", e.message);
-      }
+          }));
+        })
+        .catch(e => {
+          console.error("Error fetching from Pixabay (failover active):", e.message);
+          return [];
+        })
+      );
     }
 
-    // --- Provider 4: Picsum Photos ---
+    // Execute in parallel
+    const results = await Promise.all(promises);
+    results.forEach(arr => combined.push(...arr));
+
+    // --- Provider 4: Picsum Photos (as failover) ---
     if (combined.length === 0) {
       try {
-        const response = await fetch(`https://picsum.photos/v2/list?page=${page}&limit=${perPage}`);
+        const response = await fetchWithTimeout(`https://picsum.photos/v2/list?page=${page}&limit=${perPage}`, {}, 1500);
         if (response.ok) {
           const data = await response.json();
           combined.push(...data.map(photo => ({
@@ -292,7 +394,7 @@ router.get('/curated', async (req, res) => {
           })));
         }
       } catch (e) {
-        console.error("Error fetching from Picsum:", e.message);
+        console.error("Error fetching from Picsum (failover active):", e.message);
       }
     }
 
@@ -332,26 +434,41 @@ router.get('/search', async (req, res) => {
       return res.status(400).json({ error: 'Search query contains inappropriate or unsafe content' });
     }
 
-    let combined = [];
-    let searchQuery = query;
+    const correctedQuery = correctTypos(query);
+    const expandedTerms = getExpandedQueries(correctedQuery);
+
+    let searchQuery = correctedQuery;
     if (category && category !== 'All') {
       searchQuery = searchQuery ? `${category} ${searchQuery}` : category;
     }
 
+    // Combine top terms for richer provider results
+    let providerSearchQuery = searchQuery;
+    if (expandedTerms.length > 0 && searchQuery) {
+      providerSearchQuery = expandedTerms.slice(0, 3).join(' ');
+      if (category && category !== 'All') {
+        providerSearchQuery = `${category} ${providerSearchQuery}`;
+      }
+    }
+
+    let combined = [];
+    const promises = [];
+
     // 1. Fetch from Pexels
-    if (process.env.PEXELS_API_KEY && searchQuery) {
-      try {
-        let url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(searchQuery)}&page=${page}&per_page=${perPage}`;
-        if (color) {
-          url += `&color=${encodeURIComponent(color)}`;
-        }
-        const response = await fetch(url, {
+    if (process.env.PEXELS_API_KEY && providerSearchQuery) {
+      let url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(providerSearchQuery)}&page=${page}&per_page=${perPage}`;
+      if (color) {
+        url += `&color=${encodeURIComponent(color)}`;
+      }
+      promises.push(
+        fetchWithTimeout(url, {
           headers: { 'Authorization': process.env.PEXELS_API_KEY }
-        });
-        if (response.ok) {
+        }, 1500)
+        .then(async response => {
+          if (!response.ok) throw new Error(`Pexels API error status: ${response.status}`);
           const data = await response.json();
           const photos = data.photos || [];
-          combined.push(...photos.map(photo => ({
+          return photos.map(photo => ({
             id: `pexels_${photo.id}`,
             provider: 'pexels',
             title: photo.alt || 'Glint Exclusive',
@@ -364,61 +481,69 @@ router.get('/search', async (req, res) => {
             color: photo.avg_color || '#8127cf',
             colors: [photo.avg_color || '#8127cf'],
             tags: photo.alt ? photo.alt.split(' ').filter(w => w.length > 3) : ['nature']
-          })));
-        }
-      } catch (e) {
-        console.error("Pexels search error:", e.message);
-      }
+          }));
+        })
+        .catch(e => {
+          console.error("Pexels search error (failover active):", e.message);
+          return [];
+        })
+      );
     }
 
     // 2. Fetch from Wallhaven
-    try {
-      const wallhavenKey = process.env.WALLHAVEN_API_KEY;
-      let wallhavenUrl = wallhavenKey
-          ? `https://wallhaven.cc/api/v1/search?apikey=${wallhavenKey}&purity=100&page=${page}`
-          : `https://wallhaven.cc/api/v1/search?purity=100&page=${page}`;
-      if (searchQuery) {
-        wallhavenUrl += `&q=${encodeURIComponent(searchQuery)}`;
-      }
-      if (color) {
-        const cleanColor = color.replace('#', '');
-        wallhavenUrl += `&colors=${cleanColor}`;
-      }
-      const response = await fetch(wallhavenUrl);
-      if (response.ok) {
-        const data = await response.json();
-        const photos = data.data || [];
-        combined.push(...photos.map(photo => ({
-          id: `wallhaven_${photo.id}`,
-          provider: 'wallhaven',
-          title: photo.id,
-          author: 'Wallhaven Artist',
-          thumbnailUrl: photo.thumbs.small || photo.thumbs.large,
-          previewUrl: photo.path,
-          fullUrl: photo.path,
-          width: photo.dimension_x,
-          height: photo.dimension_y,
-          color: photo.colors && photo.colors.length > 0 ? cleanHexColor(photo.colors[0]) : '#8127cf',
-          colors: photo.colors ? photo.colors.map(cleanHexColor) : [],
-          tags: photo.category ? [photo.category] : ['aesthetic']
-        })));
-      }
-    } catch (e) {
-      console.error("Wallhaven search error:", e.message);
-    }
+    promises.push(
+      (() => {
+        const wallhavenKey = process.env.WALLHAVEN_API_KEY;
+        let wallhavenUrl = wallhavenKey
+            ? `https://wallhaven.cc/api/v1/search?apikey=${wallhavenKey}&purity=100&page=${page}`
+            : `https://wallhaven.cc/api/v1/search?purity=100&page=${page}`;
+        if (providerSearchQuery) {
+          wallhavenUrl += `&q=${encodeURIComponent(providerSearchQuery)}`;
+        }
+        if (color) {
+          const cleanColor = color.replace('#', '');
+          wallhavenUrl += `&colors=${cleanColor}`;
+        }
+        return fetchWithTimeout(wallhavenUrl, {}, 1500)
+          .then(async response => {
+            if (!response.ok) throw new Error(`Wallhaven API error status: ${response.status}`);
+            const data = await response.json();
+            const photos = data.data || [];
+            return photos.map(photo => ({
+              id: `wallhaven_${photo.id}`,
+              provider: 'wallhaven',
+              title: photo.id,
+              author: 'Wallhaven Artist',
+              thumbnailUrl: photo.thumbs.small || photo.thumbs.large,
+              previewUrl: photo.path,
+              fullUrl: photo.path,
+              width: photo.dimension_x,
+              height: photo.dimension_y,
+              color: photo.colors && photo.colors.length > 0 ? cleanHexColor(photo.colors[0]) : '#8127cf',
+              colors: photo.colors ? photo.colors.map(cleanHexColor) : [],
+              tags: photo.category ? [photo.category] : ['aesthetic']
+            }));
+          })
+          .catch(e => {
+            console.error("Wallhaven search error (failover active):", e.message);
+            return [];
+          });
+      })()
+    );
 
     // 3. Fetch from Pixabay
-    if (process.env.PIXABAY_API_KEY && searchQuery) {
-      try {
-        let pixabayUrl = `https://pixabay.com/api/?key=${process.env.PIXABAY_API_KEY}&q=${encodeURIComponent(searchQuery)}&page=${page}&per_page=${perPage}&image_type=photo&orientation=vertical&safesearch=true`;
-        if (color) {
-          pixabayUrl += `&colors=${color}`;
-        }
-        const response = await fetch(pixabayUrl);
-        if (response.ok) {
+    if (process.env.PIXABAY_API_KEY && providerSearchQuery) {
+      let pixabayUrl = `https://pixabay.com/api/?key=${process.env.PIXABAY_API_KEY}&q=${encodeURIComponent(providerSearchQuery)}&page=${page}&per_page=${perPage}&image_type=photo&orientation=vertical&safesearch=true`;
+      if (color) {
+        pixabayUrl += `&colors=${color}`;
+      }
+      promises.push(
+        fetchWithTimeout(pixabayUrl, {}, 1500)
+        .then(async response => {
+          if (!response.ok) throw new Error(`Pixabay API error status: ${response.status}`);
           const data = await response.json();
           const hits = data.hits || [];
-          combined.push(...hits.map(photo => ({
+          return hits.map(photo => ({
             id: `pixabay_${photo.id}`,
             provider: 'pixabay',
             title: photo.tags ? photo.tags.split(',')[0] : 'Glint Creative',
@@ -431,25 +556,41 @@ router.get('/search', async (req, res) => {
             color: '#8127cf',
             colors: [],
             tags: photo.tags ? photo.tags.split(',').map(t => t.trim()) : []
-          })));
-        }
-      } catch (e) {
-        console.error("Pixabay search error:", e.message);
+          }));
+        })
+        .catch(e => {
+          console.error("Pixabay search error (failover active):", e.message);
+          return [];
+        })
+      );
+    }
+
+    // Execute in parallel
+    const results = await Promise.all(promises);
+    results.forEach(arr => combined.push(...arr));
+
+    // 4. Fallback search (always match against local static wallpapers with synonyms & corrected terms)
+    const searchTerms = searchQuery ? searchQuery.toLowerCase().split(' ') : [];
+    const allTermsToSearch = [...new Set([...searchTerms, ...expandedTerms.map(t => t.toLowerCase())])];
+
+    const matched = STATIC_FALLBACK_WALLPAPERS.filter(wp => {
+      if (!searchQuery) return true;
+      return wp.tags.some(tag => allTermsToSearch.some(term => tag.toLowerCase().includes(term))) ||
+             wp.title.toLowerCase().includes(correctedQuery.toLowerCase()) ||
+             wp.title.toLowerCase().includes(query.toLowerCase());
+    });
+
+    if (matched.length > 0) {
+      if (combined.length === 0) {
+        combined.push(...matched);
+      } else {
+        // Interleave fallback matches
+        combined.unshift(...matched.slice(0, 3));
       }
     }
 
-    // 4. Fallback search
     if (combined.length === 0) {
-      const searchTerms = searchQuery.toLowerCase().split(' ');
-      const matched = STATIC_FALLBACK_WALLPAPERS.filter(wp => {
-        return wp.tags.some(tag => searchTerms.some(term => tag.toLowerCase().includes(term))) ||
-               wp.title.toLowerCase().includes(searchQuery.toLowerCase());
-      });
-      if (matched.length > 0) {
-        combined.push(...matched);
-      } else {
-        combined.push(...STATIC_FALLBACK_WALLPAPERS);
-      }
+      combined.push(...STATIC_FALLBACK_WALLPAPERS);
     }
 
     const safeCombined = filterSafeWallpapers(combined);

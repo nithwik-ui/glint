@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../models/wallpaper.dart';
 import '../providers/app_provider.dart';
 import '../screens/detail_screen.dart';
+import '../services/cache_manager.dart';
 import 'theme.dart';
 
 class WallpaperCard extends StatelessWidget {
@@ -55,26 +56,13 @@ class WallpaperCard extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                // Progressive Network Image Loading
+                // Progressive Network Image Loading: Thumbnail only for Grid Feed
                 CachedNetworkImage(
-                  imageUrl: wallpaper.getOptimizedUrl(context, type: 'preview'),
+                  cacheManager: GlintCacheManager.instance,
+                  imageUrl: wallpaper.getOptimizedUrl(context, type: 'thumbnail'),
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      // Smooth background container with wallpaper primary average color
-                      Container(
-                        color: Color(int.parse(wallpaper.color.replaceFirst('#', '0xFF'))),
-                      ),
-                      // Blurred tiny thumbnail loaded instantly
-                      ImageFiltered(
-                        imageFilter: ImageFilter.blur(sigmaX: 12.0, sigmaY: 12.0),
-                        child: Image.network(
-                          wallpaper.getOptimizedUrl(context, type: 'thumbnail'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ],
+                  placeholder: (context, url) => Container(
+                    color: Color(int.parse(wallpaper.color.replaceFirst('#', '0xFF'))),
                   ),
                   errorWidget: (context, url, error) => Container(
                     color: isDark ? const Color(0xFF1E172A) : const Color(0xFFEADBEE),

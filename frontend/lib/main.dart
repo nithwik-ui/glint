@@ -11,6 +11,10 @@ void main() async {
   // Ensure native bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Tune memory cache settings for fluid scrolling performance
+  PaintingBinding.instance.imageCache.maximumSizeBytes = 150 * 1024 * 1024; // 150 MB memory cache
+  PaintingBinding.instance.imageCache.maximumSize = 150; // 150 images
+
   // Keep screen orientation locked to portrait for optimal wallpaper experience
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

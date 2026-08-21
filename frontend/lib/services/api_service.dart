@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../models/wallpaper.dart';
 import 'request_signer.dart';
+import 'custom_exceptions.dart';
 
 class ApiService {
 
@@ -25,6 +26,13 @@ class ApiService {
     }
   }
 
+  void _handleErrorResponse(http.Response response) {
+    if (response.statusCode >= 500) {
+      throw ServerException('Server returned status code ${response.statusCode}', response.statusCode);
+    } else if (response.statusCode >= 400) {
+      throw ApiException('API returned status code ${response.statusCode}', response.statusCode);
+    }
+  }
 
 
   // Fetch curated wallpapers
@@ -38,10 +46,14 @@ class ApiService {
         final List<dynamic> list = data['wallpapers'] ?? [];
         return list.map((json) => Wallpaper.fromJson(json)).toList();
       } else {
-        throw Exception('Server returned status code ${response.statusCode}');
+        _handleErrorResponse(response);
+        throw ServerException('Failed with status code ${response.statusCode}');
       }
     } catch (e) {
       debugPrint('Error in fetchCurated: $e');
+      if (e is SocketException || e is HandshakeException || e.toString().contains('SocketException') || e.toString().contains('Failed host lookup')) {
+        throw NoInternetException('No Internet Connection. Please check your network.');
+      }
       rethrow;
     }
   }
@@ -71,10 +83,14 @@ class ApiService {
         final List<dynamic> list = data['wallpapers'] ?? [];
         return list.map((json) => Wallpaper.fromJson(json)).toList();
       } else {
-        throw Exception('Server returned status code ${response.statusCode}');
+        _handleErrorResponse(response);
+        throw ServerException('Failed with status code ${response.statusCode}');
       }
     } catch (e) {
       debugPrint('Error in searchWallpapers: $e');
+      if (e is SocketException || e is HandshakeException || e.toString().contains('SocketException') || e.toString().contains('Failed host lookup')) {
+        throw NoInternetException('No Internet Connection. Please check your network.');
+      }
       rethrow;
     }
   }
@@ -88,7 +104,6 @@ class ApiService {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data is List) {
-          // If redirected to search results, return the first one
           if (data.isNotEmpty) {
             return Wallpaper.fromJson(data[0]);
           }
@@ -96,11 +111,15 @@ class ApiService {
         }
         return Wallpaper.fromJson(data);
       } else {
-        throw Exception('Server returned status code ${response.statusCode}');
+        _handleErrorResponse(response);
+        throw ServerException('Failed with status code ${response.statusCode}');
       }
     } catch (e) {
       debugPrint('Error in fetchWallpaperOfTheDay: $e');
-      return null;
+      if (e is SocketException || e is HandshakeException || e.toString().contains('SocketException') || e.toString().contains('Failed host lookup')) {
+        throw NoInternetException('No Internet Connection. Please check your network.');
+      }
+      rethrow;
     }
   }
 }

@@ -305,6 +305,16 @@ class StorageService {
     await _saveWeights(_keyInterestCategories, categories);
   }
 
+  Future<void> clearRecentlyViewed() async {
+    await _prefs.remove(_keyRecentlyViewed);
+  }
+
+  Future<void> clearRecommendationWeights() async {
+    await _prefs.remove(_keyInterestCategories);
+    await _prefs.remove(_keyInterestColors);
+    await _prefs.remove(_keyInterestTags);
+  }
+
   Future<void> clearPersonalization() async {
     await _prefs.remove(_keyInterestCategories);
     await _prefs.remove(_keyInterestColors);

@@ -7,6 +7,7 @@ import '../models/wallpaper.dart';
 import '../providers/app_provider.dart';
 import '../widgets/theme.dart';
 import '../widgets/glassmorphic_container.dart';
+import '../services/cache_manager.dart';
 import 'crop_preview_screen.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -273,23 +274,61 @@ class _DetailScreenState extends State<DetailScreen> {
 
   // Set Wallpaper Native execution
   Future<void> _applyWallpaper(int location) async {
-    Navigator.pop(context); // Close bottom sheet
-    
-    setState(() {
-      _isSettingWallpaper = true;
-    });
+    // Show non-blocking premium progress loader dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => WillPopScope(
+        onWillPop: () async => false,
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: GlassmorphicContainer(
+            isDark: true,
+            borderRadius: GlintTheme.radiusLg,
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CircularProgressIndicator(color: GlintTheme.primary),
+                const SizedBox(height: 20.0),
+                Text(
+                  'Applying Wallpaper...',
+                  style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16.0),
+                ),
+                const SizedBox(height: 8.0),
+                const Text(
+                  'Configuring screen background in the background. Please wait.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white70, fontSize: 12.0),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
 
     final app = Provider.of<AppProvider>(context, listen: false);
     final success = await app.setWallpaper(_localFilePath!, location);
 
-    setState(() {
-      _isSettingWallpaper = false;
-    });
+    // Close the progress loader dialog
+    if (mounted) {
+      Navigator.pop(context);
+    }
 
     if (mounted) {
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Wallpaper applied successfully!')),
+          const SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.check_circle, color: Colors.green),
+                SizedBox(width: 12.0),
+                Text('Wallpaper applied successfully!'),
+              ],
+            ),
+          ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -312,17 +351,35 @@ class _DetailScreenState extends State<DetailScreen> {
           fit: StackFit.expand,
           children: [
             // Full screen wallpaper background
-            Hero(
+             Hero(
               tag: 'wallpaper_image_${widget.wallpaper.id}',
               child: InteractiveViewer(
                 minScale: 1.0,
                 maxScale: 3.0,
                 child: CachedNetworkImage(
+                  cacheManager: GlintCacheManager.instance,
                   imageUrl: widget.wallpaper.getOptimizedUrl(context, type: 'full'),
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => Image.network(
-                    widget.wallpaper.getOptimizedUrl(context, type: 'preview'),
+                  placeholder: (context, url) => CachedNetworkImage(
+                    cacheManager: GlintCacheManager.instance,
+                    imageUrl: widget.wallpaper.getOptimizedUrl(context, type: 'preview'),
                     fit: BoxFit.cover,
+                    placeholder: (context, url) => Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Container(
+                          color: Color(int.parse(widget.wallpaper.color.replaceFirst('#', '0xFF'))),
+                        ),
+                        ImageFiltered(
+                          imageFilter: ImageFilter.blur(sigmaX: 12.0, sigmaY: 12.0),
+                          child: CachedNetworkImage(
+                            cacheManager: GlintCacheManager.instance,
+                            imageUrl: widget.wallpaper.getOptimizedUrl(context, type: 'thumbnail'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   errorWidget: (context, url, error) => Container(color: Colors.black),
                 ),

@@ -27,6 +27,27 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentTab = 0;
   String _activeCategory = 'All';
   bool _hasPromptedUpdate = false;
+  
+  final ScrollController _homeScrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _homeScrollController.addListener(_onHomeScroll);
+  }
+
+  @override
+  void dispose() {
+    _homeScrollController.dispose();
+    super.dispose();
+  }
+
+  void _onHomeScroll() {
+    if (_homeScrollController.position.pixels >= _homeScrollController.position.maxScrollExtent - 400) {
+      final app = Provider.of<AppProvider>(context, listen: false);
+      app.loadMoreCurated();
+    }
+  }
 
   final List<String> _categories = [
     'All',
@@ -172,6 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: isDark ? GlintTheme.surfaceDark : GlintTheme.surfaceLight,
       edgeOffset: 80,
       child: CustomScrollView(
+        controller: _homeScrollController,
         physics: const BouncingScrollPhysics(),
         slivers: [
           // Premium Floating Glass App Bar
@@ -240,7 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: const EdgeInsets.only(
                 top: 8.0,
-                bottom: 120.0, // Space for floating bottom bar
+                bottom: 24.0,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -341,7 +363,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               return Container(
                                 margin: const EdgeInsets.only(right: 16),
                                 width: 220,
-                                child: WallpaperCard(wallpaper: wp),
+                                child: RepaintBoundary(
+                                  child: WallpaperCard(wallpaper: wp),
+                                ),
                               );
                             },
                           ),
@@ -372,31 +396,43 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: GlintTheme.headlineMedium(context),
                     ),
                   ),
-                  const SizedBox(height: 16.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: GlintTheme.marginMobile),
-                    child: app.state == AppState.loading && app.recommendedWallpapers.isEmpty
-                        ? const ShimmerGridLoading()
-                        : GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: GlintTheme.gutter,
-                              mainAxisSpacing: GlintTheme.gutter,
-                              childAspectRatio: 0.65,
-                            ),
-                            itemCount: app.recommendedWallpapers.length,
-                            itemBuilder: (context, index) {
-                              final wp = app.recommendedWallpapers[index];
-                              return WallpaperCard(wallpaper: wp);
-                            },
-                          ),
-                  ),
                 ],
               ),
             ),
           ),
+          
+          if (app.state == AppState.loading && app.recommendedWallpapers.isEmpty)
+            const SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: GlintTheme.marginMobile),
+              sliver: SliverToBoxAdapter(
+                child: ShimmerGridLoading(),
+              ),
+            )
+          else
+            SliverPadding(
+              padding: const EdgeInsets.only(
+                left: GlintTheme.marginMobile,
+                right: GlintTheme.marginMobile,
+                bottom: 140.0,
+              ),
+              sliver: SliverGrid(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: GlintTheme.gutter,
+                  mainAxisSpacing: GlintTheme.gutter,
+                  childAspectRatio: 0.65,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final wp = app.recommendedWallpapers[index];
+                    return RepaintBoundary(
+                      child: WallpaperCard(wallpaper: wp),
+                    );
+                  },
+                  childCount: app.recommendedWallpapers.length,
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -1376,8 +1412,8 @@ class _SettingsTabBodyState extends State<SettingsTabBody> {
                     ),
                     TextButton(
                       child: const Text('Reset', style: TextStyle(color: Colors.red)),
-                      onPressed: () {
-                        app.resetApp();
+                      onPressed: () async {
+                        await app.resetRecommendations();
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Personalization engine weights cleared.')),
@@ -1479,7 +1515,7 @@ class _SettingsTabBodyState extends State<SettingsTabBody> {
             onTap: () {
               app.shareWallpaper(Wallpaper(
                 id: 'share_app', provider: '', title: 'Glint Premium Wallpapers', author: 'Team Glint',
-                thumbnailUrl: '', previewUrl: '', fullUrl: 'https://github.com/Nithwik/Glint',
+                thumbnailUrl: '', previewUrl: '', fullUrl: 'https://github.com/nithwik-ui/glint',
                 width: 0, height: 0, color: '', colors: [], tags: []
               ));
             },

@@ -89,7 +89,76 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
+// Startup connectivity checks
+async function runStartupValidation() {
+  console.log('====================================');
+  console.log('   GLINT SERVER STARTUP AUDIT      ');
+  console.log('====================================');
+
+  const envStatus = process.env.PEXELS_API_KEY ? 'LOADED' : 'NOT LOADED';
+  console.log(`[Environment] Status: ${envStatus}`);
+
+  const apiStatus = {
+    Pexels: process.env.PEXELS_API_KEY ? 'AVAILABLE' : 'MISSING',
+    Pixabay: process.env.PIXABAY_API_KEY ? 'AVAILABLE' : 'MISSING',
+    Wallhaven: process.env.WALLHAVEN_API_KEY ? 'AVAILABLE' : 'MISSING',
+    NASA: process.env.NASA_API_KEY ? 'AVAILABLE' : 'MISSING',
+  };
+  console.log('[API Status] Key availability:', apiStatus);
+
+  // Check connectivity to each provider
+  const providerStatus = {};
+  
+  // Test Pexels
+  if (process.env.PEXELS_API_KEY) {
+    try {
+      const res = await fetch('https://api.pexels.com/v1/curated?per_page=1', {
+        headers: { 'Authorization': process.env.PEXELS_API_KEY }
+      });
+      providerStatus.Pexels = res.ok ? 'ONLINE' : `OFFLINE (Status ${res.status})`;
+    } catch (e) {
+      providerStatus.Pexels = `OFFLINE (${e.message})`;
+    }
+  } else {
+    providerStatus.Pexels = 'SKIPPED (No Key)';
+  }
+
+  // Test Wallhaven
+  try {
+    const res = await fetch('https://wallhaven.cc/api/v1/search?per_page=1');
+    providerStatus.Wallhaven = res.ok ? 'ONLINE' : `OFFLINE (Status ${res.status})`;
+  } catch (e) {
+    providerStatus.Wallhaven = `OFFLINE (${e.message})`;
+  }
+
+  // Test Pixabay
+  if (process.env.PIXABAY_API_KEY) {
+    try {
+      const res = await fetch(`https://pixabay.com/api/?key=${process.env.PIXABAY_API_KEY}&q=nature&per_page=1`);
+      providerStatus.Pixabay = res.ok ? 'ONLINE' : `OFFLINE (Status ${res.status})`;
+    } catch (e) {
+      providerStatus.Pixabay = `OFFLINE (${e.message})`;
+    }
+  } else {
+    providerStatus.Pixabay = 'SKIPPED (No Key)';
+  }
+
+  // Test NASA
+  const nasaKey = process.env.NASA_API_KEY || 'DEMO_KEY';
+  try {
+    const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${nasaKey}`);
+    providerStatus.NASA = res.ok ? 'ONLINE' : `OFFLINE (Status ${res.status})`;
+  } catch (e) {
+    providerStatus.NASA = `OFFLINE (${e.message})`;
+  }
+
+  console.log('[Provider Connectivity Status]', providerStatus);
+  console.log('[Failover System] Healthy providers will handle requests automatically.');
+  console.log('====================================');
+}
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`Glint Server running on port ${PORT}`);
+  runStartupValidation().catch(err => console.error('Startup validation failed:', err));
 });

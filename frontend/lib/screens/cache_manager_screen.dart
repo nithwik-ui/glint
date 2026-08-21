@@ -220,7 +220,7 @@ class _CacheManagerScreenState extends State<CacheManagerScreen> {
                       TextButton(
                         child: const Text('Reset Engine', style: TextStyle(color: Colors.red)),
                         onPressed: () async {
-                          await app.resetApp();
+                          await app.resetRecommendations();
                           Navigator.pop(context);
                           _calculateCacheSize();
                           ScaffoldMessenger.of(context).showSnackBar(

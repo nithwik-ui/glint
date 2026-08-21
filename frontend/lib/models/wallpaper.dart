@@ -15,7 +15,7 @@ class Wallpaper {
   final List<String> tags;
   final String? explanation; // NASA APOD description
 
-  String getOptimizedUrl(BuildContext context, {required String type}) {
+  String getOptimizedUrl(BuildContext context, {required String type, String format = 'webp'}) {
     final size = MediaQuery.of(context).size;
     final pixelRatio = MediaQuery.of(context).devicePixelRatio;
     
@@ -23,8 +23,8 @@ class Wallpaper {
     int targetHeight;
     
     if (type == 'thumbnail') {
-      targetWidth = 200;
-      targetHeight = (200 * (size.height / size.width)).toInt();
+      targetWidth = 250;
+      targetHeight = (250 * (size.height / size.width)).toInt();
     } else if (type == 'preview') {
       targetWidth = (size.width * (pixelRatio > 2.0 ? 1.5 : pixelRatio)).toInt();
       targetHeight = (size.height * (pixelRatio > 2.0 ? 1.5 : pixelRatio)).toInt();
@@ -41,13 +41,15 @@ class Wallpaper {
         params['h'] = targetHeight.toString();
         params['fit'] = 'crop';
         params['crop'] = 'entropy';
+        params['fm'] = format; // e.g. webp or avif
+        params['q'] = '75';
         return uri.replace(queryParameters: params).toString();
       } catch (e) {
         return previewUrl;
       }
     } else if (provider == 'picsum') {
       final rawId = id.replaceAll('picsum_', '');
-      return 'https://picsum.photos/id/$rawId/$targetWidth/$targetHeight';
+      return 'https://picsum.photos/id/$rawId/$targetWidth/$targetHeight.$format';
     } else if (fullUrl.contains('unsplash.com')) {
       try {
         final uri = Uri.parse(fullUrl);
@@ -55,7 +57,8 @@ class Wallpaper {
         params['w'] = targetWidth.toString();
         params['h'] = targetHeight.toString();
         params['fit'] = 'crop';
-        params['q'] = '80';
+        params['fm'] = format; // e.g. webp or avif
+        params['q'] = '75';
         return uri.replace(queryParameters: params).toString();
       } catch (e) {
         return fullUrl;

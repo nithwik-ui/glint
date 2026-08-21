@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -75,26 +76,45 @@ class UpdateAvailableScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 32.0),
                 
-                // Download action
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => app.launchUpdateUrl(),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: GlintTheme.primary,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(GlintTheme.radiusDefault),
+                // Download action with inline progress indicator
+                if (app.isDownloadingUpdate) ...[
+                  Text(
+                    'Downloading update: ${(app.updateDownloadProgress * 100).toInt()}%',
+                    style: GlintTheme.captionXs(context),
+                  ),
+                  const SizedBox(height: 8.0),
+                  LinearProgressIndicator(
+                    value: app.updateDownloadProgress,
+                    color: GlintTheme.primary,
+                    backgroundColor: isDark ? Colors.white12 : Colors.black12,
+                  ),
+                ] else ...[
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (Platform.isAndroid) {
+                          await app.downloadAndInstallApk(app.updateUrl);
+                        } else {
+                          app.launchUpdateUrl();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: GlintTheme.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(GlintTheme.radiusDefault),
+                        ),
+                      ),
+                      child: Text(
+                        'Download APK Update',
+                        style: GoogleFonts.inter(fontWeight: FontWeight.w600),
                       ),
                     ),
-                    child: Text(
-                      'Download APK Update',
-                      style: GoogleFonts.inter(fontWeight: FontWeight.w600),
-                    ),
                   ),
-                ),
+                ],
               ],
             ),
           ),
