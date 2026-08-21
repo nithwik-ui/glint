@@ -11,7 +11,7 @@ import 'package:async_wallpaper/async_wallpaper.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:open_app_file/open_app_file.dart';
-
+import 'package:flutter/foundation.dart';
 import '../models/wallpaper.dart';
 import '../services/api_service.dart';
 import '../services/storage_service.dart';
