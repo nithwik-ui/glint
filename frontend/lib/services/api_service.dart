@@ -10,19 +10,16 @@ class ApiService {
 
   static String? customBaseUrl;
 
-  // Dynamically resolve server base address depending on platform/environment
+  // Permanent production backend, live on Render — reachable from any network.
+  static const String _productionUrl = 'https://glint-wmrg.onrender.com';
+
+  // Resolve server base address. customBaseUrl is an optional dev-only override
+  // (e.g. for local testing via LAN IP or ngrok) — never set in release builds.
   static String get baseUrl {
     if (customBaseUrl != null && customBaseUrl!.isNotEmpty) {
       return customBaseUrl!;
     }
-    if (kIsWeb) {
-      return 'http://localhost:3000';
-    } else if (Platform.isAndroid) {
-      // Direct localhost endpoint routing for emulators (via 10.0.2.2) or real devices (via adb reverse)
-      return 'http://127.0.0.1:3000';
-    } else {
-      return 'http://localhost:3000';
-    }
+    return _productionUrl;
   }
 
   void _handleErrorResponse(http.Response response) {
