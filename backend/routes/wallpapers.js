@@ -109,13 +109,13 @@ function getExpandedQueries(query) {
   const corrected = correctTypos(query);
   const words = corrected.split(/\s+/);
   const queries = [corrected];
-  
+
   words.forEach(word => {
     if (SYNONYMS[word]) {
       queries.push(...SYNONYMS[word]);
     }
   });
-  
+
   return [...new Set(queries)].slice(0, 5);
 }
 
@@ -278,29 +278,31 @@ router.get('/curated', async (req, res) => {
         fetchWithTimeout(`https://api.pexels.com/v1/curated?page=${page}&per_page=${perPage}`, {
           headers: { 'Authorization': process.env.PEXELS_API_KEY }
         }, 1500)
-        .then(async response => {
-          if (!response.ok) throw new Error(`Pexels API error status: ${response.status}`);
-          const data = await response.json();
-          const photos = data.photos || [];
-          return photos.map(photo => ({
-            id: `pexels_${photo.id}`,
-            provider: 'pexels',
-            title: photo.alt || 'Glint Exclusive',
-            author: photo.photographer || 'Anonymous',
-            thumbnailUrl: photo.src.small || photo.src.medium,
-            previewUrl: photo.src.large2x || photo.src.large,
-            fullUrl: photo.src.original,
-            width: photo.width,
-            height: photo.height,
-            color: photo.avg_color || '#8127cf',
-            colors: [photo.avg_color || '#8127cf'],
-            tags: photo.alt ? photo.alt.split(' ').filter(w => w.length > 3) : ['nature', 'wallpaper']
-          }));
-        })
-        .catch(e => {
-          console.error("Error fetching from Pexels (failover active):", e.message);
-          return [];
-        })
+          .then(async response => {
+            if (!response.ok) throw new Error(`Pexels API error status: ${response.status}`);
+            const data = await response.json();
+            const photos = data.photos || [];
+            return photos.map(photo => ({
+              id: `pexels_${photo.id}`,
+              provider: 'pexels',
+              title: photo.alt || 'Glint Exclusive',
+              author: photo.photographer || 'Anonymous',
+              // src.small is only 130px wide — too soft for modern high-DPI grid tiles.
+              // src.medium (350px) renders sharp on 2-column phone grids.
+              thumbnailUrl: photo.src.medium || photo.src.large,
+              previewUrl: photo.src.large2x || photo.src.large,
+              fullUrl: photo.src.original,
+              width: photo.width,
+              height: photo.height,
+              color: photo.avg_color || '#8127cf',
+              colors: [photo.avg_color || '#8127cf'],
+              tags: photo.alt ? photo.alt.split(' ').filter(w => w.length > 3) : ['nature', 'wallpaper']
+            }));
+          })
+          .catch(e => {
+            console.error("Error fetching from Pexels (failover active):", e.message);
+            return [];
+          })
       );
     }
 
@@ -308,9 +310,9 @@ router.get('/curated', async (req, res) => {
     promises.push(
       (() => {
         const wallhavenKey = process.env.WALLHAVEN_API_KEY;
-        const url = wallhavenKey 
-            ? `https://wallhaven.cc/api/v1/search?apikey=${wallhavenKey}&purity=100&sorting=toplist&page=${page}`
-            : `https://wallhaven.cc/api/v1/search?purity=100&sorting=toplist&page=${page}`;
+        const url = wallhavenKey
+          ? `https://wallhaven.cc/api/v1/search?apikey=${wallhavenKey}&purity=100&sorting=toplist&page=${page}`
+          : `https://wallhaven.cc/api/v1/search?purity=100&sorting=toplist&page=${page}`;
         return fetchWithTimeout(url, {}, 1500)
           .then(async response => {
             if (!response.ok) throw new Error(`Wallhaven API error status: ${response.status}`);
@@ -342,29 +344,31 @@ router.get('/curated', async (req, res) => {
     if (process.env.PIXABAY_API_KEY) {
       promises.push(
         fetchWithTimeout(`https://pixabay.com/api/?key=${process.env.PIXABAY_API_KEY}&q=wallpaper+background&page=${page}&per_page=${perPage}&image_type=photo&orientation=vertical&safesearch=true`, {}, 1500)
-        .then(async response => {
-          if (!response.ok) throw new Error(`Pixabay API error status: ${response.status}`);
-          const data = await response.json();
-          const hits = data.hits || [];
-          return hits.map(photo => ({
-            id: `pixabay_${photo.id}`,
-            provider: 'pixabay',
-            title: photo.tags ? photo.tags.split(',')[0] : 'Glint Creative',
-            author: photo.user || 'Pixabay Creator',
-            thumbnailUrl: photo.previewURL,
-            previewUrl: photo.webformatURL,
-            fullUrl: photo.largeImageURL,
-            width: photo.imageWidth,
-            height: photo.imageHeight,
-            color: '#8127cf',
-            colors: [],
-            tags: photo.tags ? photo.tags.split(',').map(t => t.trim()) : []
-          }));
-        })
-        .catch(e => {
-          console.error("Error fetching from Pixabay (failover active):", e.message);
-          return [];
-        })
+          .then(async response => {
+            if (!response.ok) throw new Error(`Pixabay API error status: ${response.status}`);
+            const data = await response.json();
+            const hits = data.hits || [];
+            return hits.map(photo => ({
+              id: `pixabay_${photo.id}`,
+              provider: 'pixabay',
+              title: photo.tags ? photo.tags.split(',')[0] : 'Glint Creative',
+              author: photo.user || 'Pixabay Creator',
+              // previewURL is only 150px — visibly soft. webformatURL (640px) is sharp
+              // enough for grid tiles while still being much lighter than largeImageURL.
+              thumbnailUrl: photo.webformatURL || photo.previewURL,
+              previewUrl: photo.webformatURL,
+              fullUrl: photo.largeImageURL,
+              width: photo.imageWidth,
+              height: photo.imageHeight,
+              color: '#8127cf',
+              colors: [],
+              tags: photo.tags ? photo.tags.split(',').map(t => t.trim()) : []
+            }));
+          })
+          .catch(e => {
+            console.error("Error fetching from Pixabay (failover active):", e.message);
+            return [];
+          })
       );
     }
 
@@ -464,29 +468,30 @@ router.get('/search', async (req, res) => {
         fetchWithTimeout(url, {
           headers: { 'Authorization': process.env.PEXELS_API_KEY }
         }, 1500)
-        .then(async response => {
-          if (!response.ok) throw new Error(`Pexels API error status: ${response.status}`);
-          const data = await response.json();
-          const photos = data.photos || [];
-          return photos.map(photo => ({
-            id: `pexels_${photo.id}`,
-            provider: 'pexels',
-            title: photo.alt || 'Glint Exclusive',
-            author: photo.photographer || 'Anonymous',
-            thumbnailUrl: photo.src.small || photo.src.medium,
-            previewUrl: photo.src.large2x || photo.src.large,
-            fullUrl: photo.src.original,
-            width: photo.width,
-            height: photo.height,
-            color: photo.avg_color || '#8127cf',
-            colors: [photo.avg_color || '#8127cf'],
-            tags: photo.alt ? photo.alt.split(' ').filter(w => w.length > 3) : ['nature']
-          }));
-        })
-        .catch(e => {
-          console.error("Pexels search error (failover active):", e.message);
-          return [];
-        })
+          .then(async response => {
+            if (!response.ok) throw new Error(`Pexels API error status: ${response.status}`);
+            const data = await response.json();
+            const photos = data.photos || [];
+            return photos.map(photo => ({
+              id: `pexels_${photo.id}`,
+              provider: 'pexels',
+              title: photo.alt || 'Glint Exclusive',
+              author: photo.photographer || 'Anonymous',
+              // src.small is only 130px — soft on grid tiles. src.medium (350px) is sharp.
+              thumbnailUrl: photo.src.medium || photo.src.large,
+              previewUrl: photo.src.large2x || photo.src.large,
+              fullUrl: photo.src.original,
+              width: photo.width,
+              height: photo.height,
+              color: photo.avg_color || '#8127cf',
+              colors: [photo.avg_color || '#8127cf'],
+              tags: photo.alt ? photo.alt.split(' ').filter(w => w.length > 3) : ['nature']
+            }));
+          })
+          .catch(e => {
+            console.error("Pexels search error (failover active):", e.message);
+            return [];
+          })
       );
     }
 
@@ -494,9 +499,14 @@ router.get('/search', async (req, res) => {
     promises.push(
       (() => {
         const wallhavenKey = process.env.WALLHAVEN_API_KEY;
+        // IMPORTANT: sorting=relevance — without this, Wallhaven defaults to
+        // sorting by date_added, which surfaces recently-uploaded images that
+        // only loosely match the query instead of the actual best text matches.
+        // This was the root cause of searches like "naruto" returning unrelated
+        // recent uploads instead of genuinely relevant results.
         let wallhavenUrl = wallhavenKey
-            ? `https://wallhaven.cc/api/v1/search?apikey=${wallhavenKey}&purity=100&page=${page}`
-            : `https://wallhaven.cc/api/v1/search?purity=100&page=${page}`;
+          ? `https://wallhaven.cc/api/v1/search?apikey=${wallhavenKey}&purity=100&sorting=relevance&page=${page}`
+          : `https://wallhaven.cc/api/v1/search?purity=100&sorting=relevance&page=${page}`;
         if (providerSearchQuery) {
           wallhavenUrl += `&q=${encodeURIComponent(providerSearchQuery)}`;
         }
@@ -539,29 +549,30 @@ router.get('/search', async (req, res) => {
       }
       promises.push(
         fetchWithTimeout(pixabayUrl, {}, 1500)
-        .then(async response => {
-          if (!response.ok) throw new Error(`Pixabay API error status: ${response.status}`);
-          const data = await response.json();
-          const hits = data.hits || [];
-          return hits.map(photo => ({
-            id: `pixabay_${photo.id}`,
-            provider: 'pixabay',
-            title: photo.tags ? photo.tags.split(',')[0] : 'Glint Creative',
-            author: photo.user || 'Pixabay Creator',
-            thumbnailUrl: photo.previewURL,
-            previewUrl: photo.webformatURL,
-            fullUrl: photo.largeImageURL,
-            width: photo.imageWidth,
-            height: photo.imageHeight,
-            color: '#8127cf',
-            colors: [],
-            tags: photo.tags ? photo.tags.split(',').map(t => t.trim()) : []
-          }));
-        })
-        .catch(e => {
-          console.error("Pixabay search error (failover active):", e.message);
-          return [];
-        })
+          .then(async response => {
+            if (!response.ok) throw new Error(`Pixabay API error status: ${response.status}`);
+            const data = await response.json();
+            const hits = data.hits || [];
+            return hits.map(photo => ({
+              id: `pixabay_${photo.id}`,
+              provider: 'pixabay',
+              title: photo.tags ? photo.tags.split(',')[0] : 'Glint Creative',
+              author: photo.user || 'Pixabay Creator',
+              // previewURL is only 150px — soft. webformatURL (640px) is sharp on grid tiles.
+              thumbnailUrl: photo.webformatURL || photo.previewURL,
+              previewUrl: photo.webformatURL,
+              fullUrl: photo.largeImageURL,
+              width: photo.imageWidth,
+              height: photo.imageHeight,
+              color: '#8127cf',
+              colors: [],
+              tags: photo.tags ? photo.tags.split(',').map(t => t.trim()) : []
+            }));
+          })
+          .catch(e => {
+            console.error("Pixabay search error (failover active):", e.message);
+            return [];
+          })
       );
     }
 
@@ -576,8 +587,8 @@ router.get('/search', async (req, res) => {
     const matched = STATIC_FALLBACK_WALLPAPERS.filter(wp => {
       if (!searchQuery) return true;
       return wp.tags.some(tag => allTermsToSearch.some(term => tag.toLowerCase().includes(term))) ||
-             wp.title.toLowerCase().includes(correctedQuery.toLowerCase()) ||
-             wp.title.toLowerCase().includes(query.toLowerCase());
+        wp.title.toLowerCase().includes(correctedQuery.toLowerCase()) ||
+        wp.title.toLowerCase().includes(query.toLowerCase());
     });
 
     if (matched.length > 0) {
@@ -611,7 +622,7 @@ router.get('/apod', async (req, res) => {
   try {
     const apiKey = process.env.NASA_API_KEY || 'DEMO_KEY';
     const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}`);
-    
+
     if (response.ok) {
       const data = await response.json();
       if (data.media_type === 'image') {
